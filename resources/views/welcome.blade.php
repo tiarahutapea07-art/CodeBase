@@ -26,139 +26,140 @@
     </style>
 </head>
 
-<body class="bg-[#170f0b] text-gray-100">
+<body class="bg-gray-50 text-gray-800">
 
     <!-- ================= NAVBAR ================= -->
-<header class="bg-[#0f0f0f] border-b border-gray-800 sticky top-0 z-50">
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
 
-    <div class="max-w-7xl mx-auto px-6 py-5">
+        <div class="max-w-7xl mx-auto px-6 py-4">
 
-        <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between">
 
-            <!-- Logo -->
-            <a href="#" class="text-2xl font-extrabold tracking-tight">
-                <span class="text-lime-400">Re</span><span class="text-white">UseMarket</span>
-            </a>
-
-
-            <!-- Navigation -->
-            <nav class="hidden md:flex items-center gap-10 text-base font-medium">
-
-                <a href="#"
-                   class="text-gray-300 hover:text-lime-400 transition">
-                    Jelajahi
+                <!-- Logo -->
+                <a href="#" class="text-2xl font-extrabold tracking-tight">
+                    <span class="text-emerald-600">Re</span><span class="text-gray-900">UseMarket</span>
                 </a>
 
-                <a href="#kategori"
-                   class="text-gray-300 hover:text-lime-400 transition">
-                    Kategori
-                </a>
 
-                <a href="#penjual"
-                   class="text-gray-300 hover:text-lime-400 transition">
-                    Penjual
-                </a>
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center gap-10 text-base font-medium">
 
-                <a href="#blog"
-                   class="text-gray-300 hover:text-lime-400 transition">
-                    Blog
-                </a>
+                    <a href="#"
+                       class="text-gray-600 hover:text-emerald-600 transition">
+                        Jelajahi
+                    </a>
 
-            </nav>
+                    <a href="#kategori"
+                       class="text-gray-600 hover:text-emerald-600 transition">
+                        Kategori
+                    </a>
+
+                    <a href="#penjual"
+                       class="text-gray-600 hover:text-emerald-600 transition">
+                        Penjual
+                    </a>
+
+                    <a href="#blog"
+                       class="text-gray-600 hover:text-emerald-600 transition">
+                        Blog
+                    </a>
+
+                </nav>
 
 
-            <!-- Right Navigation -->
-            <div class="hidden md:flex items-center gap-8">
+                <!-- Right Navigation -->
+                <div class="hidden md:flex items-center gap-8">
 
-                <!-- Search -->
-                 <div class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 absolute left-3 top-1/2
-                    -translate-y-1/2 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m21 21-4.35-4.35m2.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-                    
-                    <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Cari..."
-                    class="w-36 bg-transparent
-                        border-b border-gray-600
-                        text-white text-sm
-                        pl-10 pr-2 py-2
-                        outline-none
-                        focus:border-lime-400
-                        transition">
+                    <!-- Search -->
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5 absolute left-3 top-1/2
+                        -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m21 21-4.35-4.35m2.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+                        
+                        <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Cari..."
+                        class="w-36 bg-gray-100
+                            border border-gray-200
+                            rounded-full
+                            text-gray-800 text-sm
+                            pl-10 pr-3 py-1.5
+                            outline-none
+                            focus:border-emerald-500 focus:bg-white
+                            transition">
                     </div>
 
 
-                <!-- Masuk -->
-                <a href="#"
-                   class="text-gray-300 hover:text-white transition font-medium">
-                    Masuk
-                </a>
+                    <!-- Masuk -->
+                    <a href="#"
+                       class="text-gray-600 hover:text-gray-900 transition font-medium">
+                        Masuk
+                    </a>
 
 
-                <!-- Jual -->
-                <a href="#"
-                   class="bg-lime-400 hover:bg-lime-300
-                          text-black font-bold
-                          px-7 py-3 rounded-xl
-                          transition">
-                    + Jual
-                </a>
+                    <!-- Jual -->
+                    <a href="#"
+                       class="bg-emerald-600 hover:bg-emerald-700
+                              text-white font-bold
+                              px-6 py-2.5 rounded-xl shadow-sm hover:shadow
+                              transition">
+                        + Jual
+                    </a>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
-
-</header>
+    </header>
 
     <!-- ================= HERO ================= -->
-    <section class="relative overflow-hidden">
+    <section class="relative overflow-hidden bg-amber-50/50">
 
         <!-- Background -->
         <div
-            class="absolute inset-0 bg-cover bg-center"
+            class="absolute inset-0 bg-cover bg-center opacity-15"
             style="background-image: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1800&auto=format&fit=crop');">
         </div>
 
-        <!-- Overlay -->
+        <!-- Overlay Gradient Cerah -->
         <div class="absolute inset-0 bg-gradient-to-r
-                    from-[#170f0b]/95 via-[#170f0b]/65
-                    to-[#170f0b]/25">
+                    from-amber-50 via-amber-50/90
+                    to-transparent">
         </div>
 
         <!-- Hero Content -->
         <div class="relative max-w-7xl mx-auto px-6">
 
-            <div class="min-h-[500px] flex items-center">
+            <div class="min-h-[480px] flex items-center">
 
                 <div class="max-w-xl">
 
-                    <p class="text-amber-500 font-semibold tracking-[0.25em]
-                              text-sm mb-4">
+                    <p class="text-amber-700 font-bold tracking-[0.25em]
+                              text-sm mb-4 uppercase">
                         SECONDHAND MARKETPLACE
                     </p>
 
-                    <h1 class="text-6xl md:text-7xl font-black
-                               leading-[0.9] tracking-tight">
+                    <h1 class="text-5xl md:text-6xl font-black
+                               leading-tight tracking-tight text-gray-900">
 
-                        <span class="text-white">RE</span><span class="text-amber-500">USE</span>
+                        <span class="text-emerald-600">RE</span><span class="text-amber-600">USE</span>
                         <br>
-                        <span class="text-white">MARKET</span>
+                        <span class="text-gray-900">MARKET</span>
 
                     </h1>
 
-                    <p class="text-gray-300 text-lg md:text-xl
-                              mt-7 max-w-lg leading-relaxed">
+                    <p class="text-gray-600 text-lg md:text-xl
+                              mt-5 max-w-lg leading-relaxed">
 
                         Platform jual beli barang bekas berkualitas.
                         Temukan barang preloved terbaik dengan harga terjangkau.
@@ -169,10 +170,10 @@
                         href="#katalog"
                         class="inline-flex items-center gap-2
                                mt-8
-                               bg-amber-500 hover:bg-amber-400
-                               text-black font-bold
-                               px-6 py-3
-                               rounded-full
+                               bg-amber-500 hover:bg-amber-600
+                               text-white font-bold
+                               px-7 py-3.5
+                               rounded-full shadow-md hover:shadow-lg
                                transition duration-300
                                hover:scale-105">
 
@@ -193,32 +194,32 @@
 
     <!-- ================= SEARCH & CATEGORY ================= -->
     <section id="kategori"
-             class="bg-[#170f0b] px-6 pt-10">
+             class="bg-gray-50 px-6 pt-12 pb-4">
 
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-4xl mx-auto">
 
             <!-- Search -->
-            <div class="relative">
+            <div class="relative shadow-sm rounded-full">
 
                 <input
                     type="text"
                     id="searchProduct"
                     placeholder="Cari barang yang kamu butuhkan..."
                     class="w-full
-                           bg-[#211710]
-                           border border-[#60432d]
+                           bg-white
+                           border border-gray-300
                            rounded-full
                            px-6 py-4 pl-14
-                           text-white
-                           placeholder-gray-500
+                           text-gray-800
+                           placeholder-gray-400
                            focus:outline-none
-                           focus:border-amber-500
+                           focus:border-amber-500 focus:ring-2 focus:ring-amber-200
                            transition"
                 >
 
                 <!-- Search Icon -->
                 <svg
-                    class="absolute left-5 top-4 w-6 h-6 text-gray-500"
+                    class="absolute left-5 top-4 w-6 h-6 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -235,14 +236,14 @@
 
 
             <!-- Category Buttons -->
-            <div class="flex flex-wrap justify-center gap-3 mt-5">
+            <div class="flex flex-wrap justify-center gap-3 mt-6">
 
                 <button
                     data-category="all"
                     class="category-btn active-category
                            px-6 py-2.5 rounded-full
-                           bg-amber-500 text-black
-                           font-semibold text-sm
+                           bg-amber-500 text-white
+                           font-semibold text-sm shadow-sm
                            transition">
 
                     ⊞ &nbsp; Semua
@@ -253,10 +254,10 @@
                     data-category="fashion"
                     class="category-btn
                            px-6 py-2.5 rounded-full
-                           border border-[#60432d]
-                           text-gray-300
+                           bg-white border border-gray-300
+                           text-gray-700 hover:bg-gray-50
                            hover:border-amber-500
-                           hover:text-amber-500
+                           hover:text-amber-600
                            transition">
 
                     ♧ &nbsp; Fashion
@@ -267,10 +268,10 @@
                     data-category="elektronik"
                     class="category-btn
                            px-6 py-2.5 rounded-full
-                           border border-[#60432d]
-                           text-gray-300
+                           bg-white border border-gray-300
+                           text-gray-700 hover:bg-gray-50
                            hover:border-amber-500
-                           hover:text-amber-500
+                           hover:text-amber-600
                            transition">
 
                     ▣ &nbsp; Elektronik
@@ -281,10 +282,10 @@
                     data-category="buku"
                     class="category-btn
                            px-6 py-2.5 rounded-full
-                           border border-[#60432d]
-                           text-gray-300
+                           bg-white border border-gray-300
+                           text-gray-700 hover:bg-gray-50
                            hover:border-amber-500
-                           hover:text-amber-500
+                           hover:text-amber-600
                            transition">
 
                     ▤ &nbsp; Buku
@@ -295,10 +296,10 @@
                     data-category="furniture"
                     class="category-btn
                            px-6 py-2.5 rounded-full
-                           border border-[#60432d]
-                           text-gray-300
+                           bg-white border border-gray-300
+                           text-gray-700 hover:bg-gray-50
                            hover:border-amber-500
-                           hover:text-amber-500
+                           hover:text-amber-600
                            transition">
 
                     ▱ &nbsp; Furniture
@@ -309,10 +310,10 @@
                     data-category="lainnya"
                     class="category-btn
                            px-6 py-2.5 rounded-full
-                           border border-[#60432d]
-                           text-gray-300
+                           bg-white border border-gray-300
+                           text-gray-700 hover:bg-gray-50
                            hover:border-amber-500
-                           hover:text-amber-500
+                           hover:text-amber-600
                            transition">
 
                     ••• &nbsp; Lainnya
@@ -328,17 +329,17 @@
 
     <!-- ================= KATALOG ================= -->
     <main id="katalog"
-          class="max-w-7xl mx-auto px-6 py-12">
+          class="max-w-7xl mx-auto px-6 py-10">
 
         <!-- Catalog Header -->
         <div class="flex flex-col md:flex-row
                     md:items-end md:justify-between
-                    gap-4 mb-7">
+                    gap-4 mb-8">
 
             <div>
 
-                <p class="text-amber-500
-                          text-sm font-semibold
+                <p class="text-amber-600
+                          text-sm font-bold
                           tracking-[0.2em] uppercase">
 
                     Explore
@@ -346,13 +347,13 @@
                 </p>
 
                 <h2 class="text-3xl font-extrabold
-                           text-white mt-2">
+                           text-gray-900 mt-1">
 
                     Katalog Barang Bekas Terbaru
 
                 </h2>
 
-                <p class="text-gray-400 mt-2">
+                <p class="text-gray-600 mt-1">
 
                     Temukan barang preloved berkualitas
                     dengan harga terjangkau.
@@ -365,7 +366,7 @@
 
                 Menampilkan
                 <span id="productCount"
-                      class="text-amber-500 font-semibold">
+                      class="text-amber-600 font-bold">
                     {{ $products->count() }}
                 </span>
                 barang
@@ -379,17 +380,17 @@
         <div
             id="productGrid"
             class="grid grid-cols-1 sm:grid-cols-2
-                   lg:grid-cols-4 gap-5">
+                   lg:grid-cols-4 gap-6">
 
             @foreach($products as $product)
 
                 <div
                     class="product-card group
-                           bg-[#211710]
-                           border border-[#493223]
-                           rounded-xl
-                           overflow-hidden
-                           hover:border-amber-500/70
+                           bg-white
+                           border border-gray-200
+                           rounded-2xl
+                           overflow-hidden shadow-sm hover:shadow-md
+                           hover:border-amber-400
                            hover:-translate-y-1
                            transition-all duration-300"
 
@@ -399,7 +400,7 @@
                 >
 
                     <!-- Image -->
-                    <div class="relative overflow-hidden">
+                    <div class="relative overflow-hidden bg-gray-100">
 
                         <img
                             src="{{ $product->image_url }}"
@@ -414,11 +415,11 @@
                         <span
                             class="absolute top-3 left-3
                                    bg-amber-500
-                                   text-black
+                                   text-white
                                    text-[11px]
                                    font-bold
                                    px-3 py-1
-                                   rounded-full">
+                                   rounded-full shadow">
 
                             PRELOVED
 
@@ -429,12 +430,12 @@
                             class="absolute top-3 right-3
                                    w-9 h-9
                                    rounded-full
-                                   bg-black/60
+                                   bg-white/80
                                    backdrop-blur-sm
                                    flex items-center justify-center
-                                   text-white
-                                   hover:text-amber-500
-                                   transition">
+                                   text-gray-600
+                                   hover:text-red-500 hover:bg-white
+                                   transition shadow-sm">
 
                             ♡
 
@@ -444,14 +445,15 @@
 
 
                     <!-- Product Info -->
-                    <div class="p-4">
+                    <div class="p-5">
 
                         <!-- Condition -->
                         <span
                             class="inline-block
                                    text-[11px]
-                                   bg-[#352419]
-                                   text-amber-400
+                                   font-semibold
+                                   bg-amber-100
+                                   text-amber-800
                                    px-2.5 py-1
                                    rounded-full">
 
@@ -463,9 +465,9 @@
                         <!-- Name -->
                         <h3
                             class="text-base font-bold
-                                   text-white
+                                   text-gray-900
                                    mt-3
-                                   group-hover:text-amber-500
+                                   group-hover:text-amber-600
                                    transition">
 
                             {{ $product->name }}
@@ -490,20 +492,21 @@
                             class="flex items-end
                                    justify-between
                                    gap-2
-                                   mt-5">
+                                   mt-5 pt-3 border-t border-gray-100">
 
                             <div>
 
                                 <p class="text-[10px]
-                                          text-gray-500
-                                          mb-1">
+                                          text-gray-400
+                                          uppercase font-semibold
+                                          mb-0.5">
 
                                     Harga
 
                                 </p>
 
                                 <p
-                                    class="text-amber-500
+                                    class="text-amber-600
                                            font-extrabold
                                            text-lg">
 
@@ -515,13 +518,12 @@
 
 
                             <button
-                                class="border border-amber-500/50
-                                       text-amber-500
-                                       hover:bg-amber-500
-                                       hover:text-black
-                                       font-semibold
+                                class="border border-amber-500
+                                       text-amber-600 hover:bg-amber-500
+                                       hover:text-white
+                                       font-bold
                                        text-xs
-                                       px-3 py-2
+                                       px-3.5 py-2
                                        rounded-full
                                        transition">
 
@@ -549,7 +551,7 @@
                 🔍
             </div>
 
-            <h3 class="text-xl font-bold text-white">
+            <h3 class="text-xl font-bold text-gray-800">
                 Barang tidak ditemukan
             </h3>
 
@@ -564,16 +566,16 @@
 
     <!-- ================= ABOUT ================= -->
     <section id="tentang"
-             class="border-t border-[#35251b]
-                    bg-[#120c09]">
+             class="border-t border-gray-200
+                    bg-white">
 
         <div class="max-w-7xl mx-auto
                     px-6 py-16">
 
             <div class="max-w-2xl">
 
-                <p class="text-amber-500
-                          text-sm font-semibold
+                <p class="text-amber-600
+                          text-sm font-bold
                           tracking-[0.2em] uppercase">
 
                     Tentang Kami
@@ -582,13 +584,13 @@
 
                 <h2 class="text-3xl
                            font-extrabold
-                           text-white mt-2">
+                           text-gray-900 mt-2">
 
                     Barang Lama, Cerita Baru.
 
                 </h2>
 
-                <p class="text-gray-400
+                <p class="text-gray-600
                           mt-4 leading-relaxed">
 
                     ReUseMarket merupakan platform jual beli barang
@@ -609,11 +611,11 @@
 
     <!-- ================= FOOTER ================= -->
     <footer id="kontak"
-            class="bg-[#0d0806]
-                   border-t border-[#35251b]">
+            class="bg-gray-100
+                   border-t border-gray-200">
 
         <div class="max-w-7xl mx-auto
-                    px-6 py-10">
+                    px-6 py-12">
 
             <div class="grid grid-cols-1
                         md:grid-cols-3
@@ -624,7 +626,7 @@
 
                     <h3 class="text-xl font-extrabold">
 
-                        <span class="text-white">Re</span><span class="text-amber-500">Use</span><span class="text-white">Market</span>
+                        <span class="text-emerald-600">Re</span><span class="text-amber-600">Use</span><span class="text-gray-900">Market</span>
 
                     </h3>
 
@@ -641,25 +643,25 @@
                 <!-- Navigation -->
                 <div>
 
-                    <h4 class="text-white font-semibold mb-3">
+                    <h4 class="text-gray-900 font-semibold mb-3">
                         Navigasi
                     </h4>
 
                     <div class="flex flex-col gap-2
-                                text-sm text-gray-500">
+                                text-sm text-gray-600">
 
                         <a href="#"
-                           class="hover:text-amber-500 transition">
+                           class="hover:text-amber-600 transition">
                             Beranda
                         </a>
 
                         <a href="#kategori"
-                           class="hover:text-amber-500 transition">
+                           class="hover:text-amber-600 transition">
                             Kategori
                         </a>
 
                         <a href="#tentang"
-                           class="hover:text-amber-500 transition">
+                           class="hover:text-amber-600 transition">
                             Tentang Kami
                         </a>
 
@@ -671,15 +673,15 @@
                 <!-- Contact -->
                 <div>
 
-                    <h4 class="text-white font-semibold mb-3">
+                    <h4 class="text-gray-900 font-semibold mb-3">
                         Kontak
                     </h4>
 
-                    <p class="text-gray-500 text-sm">
+                    <p class="text-gray-600 text-sm">
                         Email: reusemarket@gmail.com
                     </p>
 
-                    <p class="text-gray-500 text-sm mt-2">
+                    <p class="text-gray-600 text-sm mt-2">
                         Instagram: @reusemarket
                     </p>
 
@@ -690,12 +692,12 @@
 
             <!-- Copyright -->
             <div
-                class="border-t border-[#35251b]
-                       mt-8 pt-6
+                class="border-t border-gray-200
+                       mt-10 pt-6
                        flex flex-col md:flex-row
                        justify-between
                        gap-3
-                       text-xs text-gray-600">
+                       text-xs text-gray-500">
 
                 <p>
                     © 2025 ReUseMarket.
@@ -758,10 +760,6 @@
                     `${name} ${description} ${condition}`;
 
 
-                /*
-                 * Untuk sementara kategori berdasarkan
-                 * kata yang terdapat pada nama/deskripsi.
-                 */
                 let categoryMatch = true;
 
 
@@ -855,13 +853,15 @@
                     btn.classList.remove(
                         'active-category',
                         'bg-amber-500',
-                        'text-black'
+                        'text-white',
+                        'shadow-sm'
                     );
 
                     btn.classList.add(
+                        'bg-white',
                         'border',
-                        'border-[#60432d]',
-                        'text-gray-300'
+                        'border-gray-300',
+                        'text-gray-700'
                     );
 
                 });
@@ -871,13 +871,14 @@
                 this.classList.add(
                     'active-category',
                     'bg-amber-500',
-                    'text-black'
+                    'text-white',
+                    'shadow-sm'
                 );
 
                 this.classList.remove(
-                    'border',
-                    'border-[#60432d]',
-                    'text-gray-300'
+                    'bg-white',
+                    'border-gray-300',
+                    'text-gray-700'
                 );
 
 

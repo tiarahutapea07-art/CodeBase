@@ -67,7 +67,7 @@
                 </nav>
 
 
-                <!-- Right Navigation -->
+<!-- Right Navigation -->
                 <div class="hidden md:flex items-center gap-8">
 
                     <!-- Search -->
@@ -96,6 +96,15 @@
                             focus:border-emerald-500 focus:bg-white
                             transition">
                     </div>
+
+
+                    <!-- Admin (TAMBAHAN TOMBOL DASHBOARD) -->
+                    <a href="{{ route('dashboard') }}"
+                       class="text-emerald-700 bg-emerald-50 border border-emerald-200 
+                              hover:bg-emerald-600 hover:text-white 
+                              font-semibold px-4 py-2 rounded-xl transition">
+                        Admin
+                    </a>
 
 
                     <!-- Masuk -->

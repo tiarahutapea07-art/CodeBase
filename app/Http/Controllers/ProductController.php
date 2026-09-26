@@ -13,7 +13,8 @@ class ProductController extends Controller
         return view('welcome', compact('products'));
     }
 
-    public function index()
+    // HALAMAN DASHBOARD (Ringkasan Saja)
+    public function dashboard()
     {
         $products = Product::with('user')->latest()->get();
         $totalProducts = Product::count();
@@ -22,7 +23,13 @@ class ProductController extends Controller
         return view('dashboard.index', compact('products', 'totalProducts', 'totalValue'));
     }
 
-    // SIMPAN BARANG BARU (CREATE)
+    // HALAMAN DATA BARANG (Kelola CRUD)
+    public function index()
+    {
+        $products = Product::with('user')->latest()->get();
+        return view('products.index', compact('products'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,21 +40,18 @@ class ProductController extends Controller
             'image_url'   => 'nullable|url',
         ]);
 
-        // Sementara di-set user_id = 1 (Ganti sesuai kebutuhan auth)
         $validated['user_id'] = 1;
 
         Product::create($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Barang berhasil ditambahkan!');
+        return redirect()->route('products.index')->with('success', 'Barang berhasil ditambahkan!');
     }
 
-    // AMBIL DATA KETIKA EDIT (READ UPDATE DATA)
     public function edit(Product $product)
     {
         return response()->json($product);
     }
 
-    // UPDATE DATA BARANG (UPDATE)
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
@@ -60,14 +64,13 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Barang berhasil diperbarui!');
+        return redirect()->route('products.index')->with('success', 'Barang berhasil diperbarui!');
     }
 
-    // HAPUS BARANG (DELETE)
     public function destroy(Product $product)
     {
         $product->delete();
 
-        return redirect()->route('dashboard')->with('success', 'Barang berhasil dihapus!');
+        return redirect()->route('products.index')->with('success', 'Barang berhasil dihapus!');
     }
 }

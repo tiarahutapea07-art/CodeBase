@@ -53,7 +53,13 @@
                 </div>
                 <div class="px-2">
                     <div class="text-[11px] text-emerald-400 font-medium uppercase tracking-wider">Pengguna Aktif</div>
-                    <div class="text-sm font-semibold text-white truncate">Admin ReUseMarket</div>
+                    <form method="POST" action="{{ route('logout') }}" class="px-2">
+                        @csrf
+                        <button type="submit" class="w-full text-left text-sm text-emerald-300 hover:text-white transition">Keluar
+
+                        </button>
+                    </form>
+                    <div class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</div>
                 </div>
             </div>
         </aside>

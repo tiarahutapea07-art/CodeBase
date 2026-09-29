@@ -99,19 +99,20 @@
 
 
                     <!-- Admin (TAMBAHAN TOMBOL DASHBOARD) -->
-                    <a href="{{ route('dashboard') }}"
-                       class="text-emerald-700 bg-emerald-50 border border-emerald-200 
-                              hover:bg-emerald-600 hover:text-white 
-                              font-semibold px-4 py-2 rounded-xl transition">
-                        Admin
-                    </a>
+                    <!-- Admin -->
+<a href="{{ route('admin.login') }}"
+   class="text-emerald-700 bg-emerald-50 border border-emerald-200 
+          hover:bg-emerald-600 hover:text-white 
+          font-semibold px-4 py-2 rounded-xl transition">
+    Admin
+</a>
 
 
-                    <!-- Masuk -->
-                    <a href="#"
-                       class="text-gray-600 hover:text-gray-900 transition font-medium">
-                        Masuk
-                    </a>
+                   <!-- Masuk -->
+<a href="{{ route('login') }}"
+   class="text-gray-600 hover:text-gray-900 transition font-medium">
+    Masuk
+</a>
 
 
                     <!-- Jual -->
@@ -412,7 +413,7 @@
                     <div class="relative overflow-hidden bg-gray-100">
 
                         <img
-                            src="{{ $product->image_url }}"
+                            src="{{ asset($product->image_url) }}"
                             alt="{{ $product->name }}"
                             class="w-full h-56
                                    object-cover

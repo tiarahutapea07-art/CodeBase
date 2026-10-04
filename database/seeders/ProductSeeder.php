@@ -3,34 +3,51 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 
 class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        Product::create([
-            'name' => 'Jaket Denim Vintage Levi\'s',
-            'description' => 'Jaket denim bekas pemakaian 6 bulan, kondisi 90% masih bagus.',
-            'price' => 150000,
-            'condition' => 'Sangat Baik',
-            'image_url' => 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500',
-        ]);
+        $user = User::first(); // admin dari AdminSeeder
 
-        Product::create([
-            'name' => 'Kamera Analog Canon AE-1',
-            'description' => 'Kamera koleksi pribadi, fungsi normal, lensa mulus no jamur.',
-            'price' => 850000,
-            'condition' => 'Bekas Pemakaian Normal',
-            'image_url' => 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500',
-        ]);
+        $fashion    = Category::firstOrCreate(['slug' => 'fashion'],    ['name' => 'Fashion']);
+        $elektronik = Category::firstOrCreate(['slug' => 'elektronik'], ['name' => 'Elektronik']);
 
-        Product::create([
-            'name' => 'Sepatu Nike Air Jordan 1 Original',
-            'description' => 'Size 42, kelengkapan replacement box. Tapak masih tebal.',
-            'price' => 600000,
-            'condition' => 'Lecet Pemakaian',
-            'image_url' => 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500',
-        ]);
+        $products = [
+            [
+                'user_id'     => $user->id,
+                'category_id' => $fashion->id,
+                'name'        => 'Jaket Cheongsam',
+                'description' => 'Jaket warna hitam dengan model trendy, kondisi sangat baik.',
+                'price'       => 150000,
+                'condition'   => 'Sangat Baik',
+                'image_url'   => 'images/jaket.jpeg',
+            ],
+            [
+                'user_id'     => $user->id,
+                'category_id' => $fashion->id,
+                'name'        => 'Sepatu Nike',
+                'description' => 'Sepatu Nike warna hitam putih bekas, kondisi masih sangat baik.',
+                'price'       => 250000,
+                'condition'   => 'Sangat Baik',
+                'image_url'   => 'images/sepatu.jpeg',
+            ],
+            [
+                'user_id'     => $user->id,
+                'category_id' => $elektronik->id,
+                'name'        => 'TV LED Samsung 32 Inch',
+                'description' => 'TV LED Samsung 32 inch bekas, layar masih jernih dan kondisi sangat baik.',
+                'price'       => 1500000,
+                'condition'   => 'Sangat Baik',
+                'image_url'   => 'images/TV.jpeg',
+            ],
+        ];
+
+        foreach ($products as $p) {
+            Product::create($p);
+        }
     }
 }

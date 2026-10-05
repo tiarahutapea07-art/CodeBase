@@ -41,5 +41,5 @@ Route::middleware('guest')->group(function () {
 Route::post('/keluar', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', fn () => view('admin.dashboard'))->name('dashboard');
+    Route::get('/', fn () => view('dashboard.index'))->name('dashboard');
 });

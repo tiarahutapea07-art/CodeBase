@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\IncomingGoodController;
+use App\Http\Controllers\OutgoingGoodController;
+use App\Http\Controllers\UserController;
 
 // Publik: katalog ada di beranda
 Route::get('/', [ProductController::class, 'home'])->name('home');
@@ -17,6 +20,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    // --- TAMBAHAN CRUD BARU DI SINI ---
+    Route::resource('incoming-goods', IncomingGoodController::class);
+    Route::resource('outgoing-goods', OutgoingGoodController::class);
+    Route::resource('users', UserController::class);
 });
 
 Route::middleware('guest')->group(function () {

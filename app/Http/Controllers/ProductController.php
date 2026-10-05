@@ -5,21 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Category;
 
 class ProductController extends Controller
 {
-    public function home(Request $request)
-{
-    $products = Product::with('category')
-        ->when($request->kategori, fn ($q, $slug) =>
-            $q->whereHas('category', fn ($c) => $c->where('slug', $slug)))
-        ->latest()->get();
+    public function home()
+    {
+        $products = Product::latest()->get();
 
-    return view('welcome', compact('products'));
-}
-
-
+        return view('welcome', compact('products'));
+    }
 
     // HALAMAN DASHBOARD (Ringkasan Saja)
     public function dashboard()

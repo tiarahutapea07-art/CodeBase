@@ -100,19 +100,19 @@
 
                     <!-- Admin (TAMBAHAN TOMBOL DASHBOARD) -->
                     <!-- Admin -->
-<a href="{{ route('admin.login') }}"
-   class="text-emerald-700 bg-emerald-50 border border-emerald-200 
-          hover:bg-emerald-600 hover:text-white 
-          font-semibold px-4 py-2 rounded-xl transition">
-    Admin
-</a>
+                    <a href="{{ route('admin.login') }}"
+                    class="text-emerald-700 bg-emerald-50 border border-emerald-200 
+                            hover:bg-emerald-600 hover:text-white 
+                            font-semibold px-4 py-2 rounded-xl transition">
+                        Admin
+                    </a>
 
 
-                   <!-- Masuk -->
-<a href="{{ route('login') }}"
-   class="text-gray-600 hover:text-gray-900 transition font-medium">
-    Masuk
-</a>
+                                    <!-- Masuk -->
+                    <a href="{{ route('login') }}"
+                    class="text-gray-600 hover:text-gray-900 transition font-medium">
+                        Masuk
+                    </a>
 
 
                     <!-- Jual -->
@@ -389,20 +389,19 @@
         <!-- Product Grid -->
         <div
             id="productGrid"
-            class="grid grid-cols-1 sm:grid-cols-2
-                   lg:grid-cols-4 gap-6">
+            class="flex overflow-x-auto space-x-6 pb-6 pt-2 scrollbar-hide snap-x snap-mandatory">
 
             @foreach($products as $product)
 
                 <div
-                    class="product-card group
-                           bg-white
-                           border border-gray-200
-                           rounded-2xl
-                           overflow-hidden shadow-sm hover:shadow-md
-                           hover:border-amber-400
-                           hover:-translate-y-1
-                           transition-all duration-300"
+                    class="product-card group flex-none w-[280px] sm:w-[320px] snap-start
+                        bg-white
+                        border border-gray-200
+                        rounded-2xl
+                        overflow-hidden shadow-sm hover:shadow-lg
+                        hover:border-amber-400
+                        hover:-translate-y-1
+                        transition-all duration-300"
 
                     data-product-name="{{ strtolower($product->name) }}"
                     data-product-description="{{ strtolower($product->description) }}"
@@ -527,18 +526,15 @@
                             </div>
 
 
-                            <button
-                                class="border border-amber-500
-                                       text-amber-600 hover:bg-amber-500
-                                       hover:text-white
-                                       font-bold
-                                       text-xs
-                                       px-3.5 py-2
-                                       rounded-full
-                                       transition">
-
+                            <button  
+                                type="button"
+                                class="btn-detail border border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white font-bold text-xs px-3.5 py-2 rounded-full transition cursor-pointer"
+                                data-title="{{ $product->name }}"
+                                data-price="{{ number_format($product->price, 0, ',', '.') }}"
+                                data-condition="{{ $product->condition }}"
+                                data-description="{{ $product->description }}"
+                                data-image="{{ asset($product->image_url ?? 'images/' . $product->image) }}">
                                 Lihat Detail
-
                             </button>
 
                         </div>
@@ -720,6 +716,66 @@
 
             </div>
 
+            <!-- Modal Detail Produk (Popup Warm Amber/Orange Theme) -->
+            <div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300">
+                
+                <!-- Kartu Modal Container -->
+                <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 transform transition-all scale-95 opacity-0 duration-300" id="modalCard">
+                    
+                    <!-- Tombol Close (Silang) -->
+                    <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 w-9 h-9 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-full flex items-center justify-center transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <!-- Content Grid Modal -->
+                    <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+                        
+                        <!-- Foto Produk -->
+                        <div class="md:col-span-5">
+                            <div class="relative aspect-square rounded-2xl overflow-hidden bg-amber-50/50 border border-amber-100 shadow-inner">
+                                <img id="modalImage" src="" alt="Produk" class="w-full h-full object-cover">
+                                <span id="modalCondition" class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-amber-200/60 uppercase tracking-wider shadow-sm">
+                                    ✨ Kondisi: -
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Detail Info -->
+                        <div class="md:col-span-7 space-y-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-amber-600">PRELOVED ITEM</span>
+                                <h2 id="modalTitle" class="text-xl md:text-2xl font-extrabold text-slate-900 leading-snug mt-1">
+                                    Nama Produk
+                                </h2>
+                                <p class="text-2xl font-black text-amber-600 tracking-tight mt-2">
+                                    Rp <span id="modalPrice">0</span>
+                                </p>
+                            </div>
+
+                            <!-- Deskripsi -->
+                            <div class="bg-amber-50/40 p-3.5 rounded-2xl border border-amber-100/80 max-h-32 overflow-y-auto">
+                                <h4 class="text-[11px] font-bold text-amber-800/60 uppercase tracking-wider mb-1">DESKRIPSI PRODUK</h4>
+                                <p id="modalDescription" class="text-slate-600 text-xs leading-relaxed">
+                                    Deskripsi produk...
+                                </p>
+                            </div>
+
+                            <!-- Tombol Aksi Oranye -->
+                            <div class="space-y-2 pt-1">
+                                <button class="w-full py-3.5 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 005.474 5.474l.772-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                    </svg>
+                                    Hubungi Penjual Sekarang
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
     </footer>
@@ -727,177 +783,137 @@
 
     <!-- ================= SEARCH & FILTER SCRIPT ================= -->
     <script>
-
-        const searchInput =
-            document.getElementById('searchProduct');
-
-        const productCards =
-            document.querySelectorAll('.product-card');
-
-        const productCount =
-            document.getElementById('productCount');
-
-        const emptyMessage =
-            document.getElementById('emptyMessage');
-
-        const categoryButtons =
-            document.querySelectorAll('.category-btn');
+        const searchInput = document.getElementById('searchProduct');
+        const productCards = document.querySelectorAll('.product-card');
+        const productCount = document.getElementById('productCount');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const categoryButtons = document.querySelectorAll('.category-btn');
 
         let selectedCategory = 'all';
 
-
         function filterProducts() {
-
-            const keyword =
-                searchInput.value.toLowerCase().trim();
-
+            const keyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
             let visibleProducts = 0;
 
-
             productCards.forEach(card => {
+                const name = card.dataset.productName || '';
+                const description = card.dataset.productDescription || '';
+                const condition = card.dataset.productCondition || '';
 
-                const name =
-                    card.dataset.productName;
-
-                const description =
-                    card.dataset.productDescription;
-
-                const condition =
-                    card.dataset.productCondition;
-
-
-                const text =
-                    `${name} ${description} ${condition}`;
-
-
+                const text = `${name} ${description} ${condition}`;
                 let categoryMatch = true;
 
-
                 if (selectedCategory !== 'all') {
-
                     if (selectedCategory === 'fashion') {
-
-                        categoryMatch =
-                            /baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion/.test(text);
-
+                        categoryMatch = /baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion/.test(text);
                     } else if (selectedCategory === 'elektronik') {
-
-                        categoryMatch =
-                            /laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik/.test(text);
-
+                        categoryMatch = /laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik/.test(text);
                     } else if (selectedCategory === 'buku') {
-
-                        categoryMatch =
-                            /buku|novel|komik|majalah/.test(text);
-
+                        categoryMatch = /buku|novel|komik|majalah/.test(text);
                     } else if (selectedCategory === 'furniture') {
-
-                        categoryMatch =
-                            /kursi|meja|lemari|rak|sofa|furniture/.test(text);
-
+                        categoryMatch = /kursi|meja|lemari|rak|sofa|furniture/.test(text);
                     } else if (selectedCategory === 'lainnya') {
-
-                        categoryMatch =
-                            !/baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion|laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik|buku|novel|komik|majalah|kursi|meja|lemari|rak|sofa|furniture/.test(text);
-
+                        categoryMatch = !/baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion|laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik|buku|novel|komik|majalah|kursi|meja|lemari|rak|sofa|furniture/.test(text);
                     }
-
                 }
 
-
-                const searchMatch =
-                    text.includes(keyword);
-
+                const searchMatch = text.includes(keyword);
 
                 if (categoryMatch && searchMatch) {
-
                     card.classList.remove('hidden');
-
                     visibleProducts++;
-
                 } else {
-
                     card.classList.add('hidden');
-
                 }
-
             });
 
+            if (productCount) productCount.textContent = visibleProducts;
 
-            productCount.textContent =
-                visibleProducts;
-
-
-            if (visibleProducts === 0) {
-
-                emptyMessage.classList.remove('hidden');
-
-            } else {
-
-                emptyMessage.classList.add('hidden');
-
+            if (emptyMessage) {
+                if (visibleProducts === 0) {
+                    emptyMessage.classList.remove('hidden');
+                } else {
+                    emptyMessage.classList.add('hidden');
+                }
             }
-
         }
 
+        if (searchInput) {
+            searchInput.addEventListener('input', filterProducts);
+        }
 
-        // Search
-        searchInput.addEventListener(
-            'input',
-            filterProducts
-        );
-
-
-        // Category
         categoryButtons.forEach(button => {
-
             button.addEventListener('click', function () {
+                selectedCategory = this.dataset.category;
 
-                selectedCategory =
-                    this.dataset.category;
-
-
-                // Reset semua button
                 categoryButtons.forEach(btn => {
-
-                    btn.classList.remove(
-                        'active-category',
-                        'bg-amber-500',
-                        'text-white',
-                        'shadow-sm'
-                    );
-
-                    btn.classList.add(
-                        'bg-white',
-                        'border',
-                        'border-gray-300',
-                        'text-gray-700'
-                    );
-
+                    btn.classList.remove('active-category', 'bg-amber-500', 'text-white', 'shadow-sm');
+                    btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
                 });
 
-
-                // Aktifkan button
-                this.classList.add(
-                    'active-category',
-                    'bg-amber-500',
-                    'text-white',
-                    'shadow-sm'
-                );
-
-                this.classList.remove(
-                    'bg-white',
-                    'border-gray-300',
-                    'text-gray-700'
-                );
-
+                this.classList.add('active-category', 'bg-amber-500', 'text-white', 'shadow-sm');
+                this.classList.remove('bg-white', 'border-gray-300', 'text-gray-700');
 
                 filterProducts();
-
             });
-
         });
 
+        // ==========================================
+        // EVENT LISTENER MODAL DETAIL (AMAN & ANTI-ERROR)
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('productModal');
+            const modalCard = document.getElementById('modalCard');
+
+            // Buka Modal saat Tombol Detail Diklik
+            document.addEventListener('click', function (e) {
+                const btn = e.target.closest('.btn-detail');
+                if (btn) {
+                    const title = btn.dataset.title;
+                    const price = btn.dataset.price;
+                    const condition = btn.dataset.condition;
+                    const description = btn.dataset.description;
+                    const image = btn.dataset.image;
+
+                    if (document.getElementById('modalTitle')) document.getElementById('modalTitle').innerText = title;
+                    if (document.getElementById('modalPrice')) document.getElementById('modalPrice').innerText = price;
+                    if (document.getElementById('modalCondition')) document.getElementById('modalCondition').innerText = '✨ Kondisi: ' + condition;
+                    if (document.getElementById('modalDescription')) document.getElementById('modalDescription').innerText = description;
+                    if (document.getElementById('modalImage')) document.getElementById('modalImage').src = image;
+
+                    if (modal && modalCard) {
+                        modal.classList.remove('hidden');
+                        setTimeout(() => {
+                            modalCard.classList.remove('scale-95', 'opacity-0');
+                            modalCard.classList.add('scale-100', 'opacity-100');
+                        }, 10);
+                    }
+                }
+            });
+
+            // Tutup Modal jika Area Luar diklik
+            if (modal) {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        closeProductModal();
+                    }
+                });
+            }
+        });
+
+        function closeProductModal() {
+            const modal = document.getElementById('productModal');
+            const modalCard = document.getElementById('modalCard');
+
+            if (modal && modalCard) {
+                modalCard.classList.remove('scale-100', 'opacity-100');
+                modalCard.classList.add('scale-95', 'opacity-0');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
     </script>
 
 </body>

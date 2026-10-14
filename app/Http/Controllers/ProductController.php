@@ -115,4 +115,13 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Barang berhasil dihapus!');
     }
+
+    public function show($id)
+    {
+        // Mengambil data produk berdasarkan ID
+        $product = Product::findOrFail($id);
+
+        // Mengembalikan view detail barang dengan membawa data produk
+        return view('products.show', compact('product'));
+    }
 }

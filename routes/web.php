@@ -7,6 +7,7 @@ use App\Http\Controllers\IncomingGoodController;
 use App\Http\Controllers\OutgoingGoodController;
 use App\Http\Controllers\UserController;
 
+
 // Publik: katalog ada di beranda
 Route::get('/', [ProductController::class, 'home'])->name('home');
 
@@ -43,3 +44,5 @@ Route::post('/keluar', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', fn () => view('dashboard.index'))->name('dashboard');
 });
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');

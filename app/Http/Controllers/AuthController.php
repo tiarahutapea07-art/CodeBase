@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -15,22 +15,30 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    $credentials = $request->validate([
+        'email'    => ['required', 'email'],
+        'password' => ['required'],
+    ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
+    if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $request->session()->regenerate();
 
-            return auth()->user()->isAdmin()
-                ? redirect()->route('admin.dashboard')
-                : redirect()->intended('/');
+        // Admin masuk ke dashboard admin
+        if (auth()->user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.'])->onlyInput('email');
+        // Pengguna biasa masuk ke homepage marketplace
+        return redirect()->route('home');
     }
+
+    return back()
+        ->withErrors([
+            'email' => 'Email atau password salah.'
+        ])
+        ->onlyInput('email');
+}
 
     // ---------- LOGIN ADMIN ----------
     public function showAdminLogin()
@@ -68,25 +76,26 @@ class AuthController extends Controller
     }
 
     public function register(Request $request)
-    {
-        $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
-        ]);
+{
+    $data = $request->validate([
+        'name'     => ['required', 'string', 'max:255'],
+        'email'    => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'min:8', 'confirmed'],
+    ]);
 
-        $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => $data['password'], // otomatis di-hash oleh cast 'hashed' di model User
-            'role'     => 'user',            // selalu user, jangan ambil dari input
-        ]);
+    $user = User::create([
+        'name'     => $data['name'],
+        'email'    => $data['email'],
+        'password' => $data['password'],
+        'role'     => 'user',
+    ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+    Auth::login($user);
 
-        return redirect('/');
-    }
+    $request->session()->regenerate();
+
+    return redirect()->route('home');
+}
 
     // ---------- LOGOUT ----------
     public function logout(Request $request)

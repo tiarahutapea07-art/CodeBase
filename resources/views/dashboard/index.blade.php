@@ -25,6 +25,18 @@
                 <a href="{{ route('products.index') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition">
                     Kelola Data Barang &rarr;
                 </a>
+                <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition">
+                    Keluar
+                </button>
+            </form>
+        </div>
+                
+
+
+                
             </header>
 
             <!-- Card Ringkasan Statistik -->

@@ -123,5 +123,9 @@ class ProductController extends Controller
 
         // Mengembalikan view detail barang dengan membawa data produk
         return view('products.show', compact('product'));
+
+        
     }
+
+    
 }

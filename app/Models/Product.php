@@ -30,5 +30,8 @@ class Product extends Model
     return $this->belongsTo(Category::class);
 }
 
+public function negotiations() { 
+    return $this->hasMany(Negotiation::class); }
+
     
 }

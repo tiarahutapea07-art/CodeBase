@@ -56,7 +56,7 @@
 
                     <a href="#penjual"
                        class="text-gray-600 hover:text-emerald-600 transition">
-                        Penjual
+                        Tentang
                     </a>
 
                     <a href="#blog"
@@ -526,16 +526,10 @@
                             </div>
 
 
-                            <button  
-                                type="button"
-                                class="btn-detail border border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white font-bold text-xs px-3.5 py-2 rounded-full transition cursor-pointer"
-                                data-title="{{ $product->name }}"
-                                data-price="{{ number_format($product->price, 0, ',', '.') }}"
-                                data-condition="{{ $product->condition }}"
-                                data-description="{{ $product->description }}"
-                                data-image="{{ asset($product->image_url ?? 'images/' . $product->image) }}">
-                                Lihat Detail
-                            </button>
+                            <a href="{{ route('products.show', $product) }}"
+   class="border border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white font-bold text-xs px-3.5 py-2 rounded-full transition">
+    Lihat Detail
+</a>
 
                         </div>
 

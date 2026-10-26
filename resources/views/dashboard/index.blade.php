@@ -14,30 +14,34 @@
         <!-- Sidebar Navigation -->
         <x-sidebar active="dashboard" />
 
-        <!-- Main Content Area -->
-        <main class="flex-1 p-8 overflow-y-auto">
+      <!-- Main Content Area -->
+       <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">
+                    Ringkasan Aktivitas
+                </h2>
+                <p class="text-sm text-gray-500">
+                    Pantau pergerakan barang bekas dan aktivitas user.
+                </p>
+            </div>
             
-            <header class="flex justify-between items-center mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Ringkasan Aktivitas</h2>
-                    <p class="text-sm text-gray-500">Pantau pergerakan barang bekas dan aktivitas user.</p>
-                </div>
-                <a href="{{ route('products.index') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition">
+            <div class="flex items-center gap-4">
+                <a href="{{ route('products.index') }}"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition">
                     Kelola Data Barang &rarr;
                 </a>
+                
                 <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
+                    @csrf
+                    <button type="submit"
                     class="bg-red-500 hover:bg-red-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-sm transition">
                     Keluar
                 </button>
             </form>
         </div>
-                
+    </header>
 
-
-                
-            </header>
 
             <!-- Card Ringkasan Statistik -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">

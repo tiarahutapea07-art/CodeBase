@@ -32,7 +32,6 @@
                     + Tambah Barang Baru
                 </button>
             </header>
-
             <!-- Tabel Data Barang -->
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
                 <table class="w-full text-left border-collapse">

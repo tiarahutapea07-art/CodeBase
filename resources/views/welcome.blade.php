@@ -28,313 +28,517 @@
 
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- ================= NAVBAR ================= -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+   
+<!-- ================= NAVBAR REUSEMARKET ================= -->
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-[1440px] mx-auto px-5 py-4">
+        <div class="flex flex-wrap lg:flex-nowrap items-center gap-4">
 
-        <div class="max-w-7xl mx-auto px-6 py-4">
+            <!-- Logo -->
+            <a href="{{ route('home') }}"
+               class="text-2xl font-extrabold tracking-tight whitespace-nowrap">
+                <span class="text-emerald-600">Re</span><span class="text-gray-900">UseMarket</span>
+            </a>
 
-            <div class="flex items-center justify-between">
+            <!-- Pilih Lokasi -->
+            
+<button type="button" id="openLocation"
+    class="flex items-center justify-between gap-2 border border-gray-300 rounded-xl px-3 py-3 min-w-[170px] hover:border-emerald-500 transition">
 
-                <!-- Logo -->
-                <a href="#" class="text-2xl font-extrabold tracking-tight">
-                    <span class="text-emerald-600">Re</span><span class="text-gray-900">UseMarket</span>
-                </a>
+    <span class="flex items-center gap-2 min-w-0">
+        <svg class="w-5 h-5 text-emerald-600 shrink-0"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+        </svg>
 
+        <span id="selectedLocation"
+              class="text-sm text-gray-700 truncate">
+            Pilih lokasi
+        </span>
+    </span>
 
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center gap-10 text-base font-medium">
+    <svg class="w-4 h-4 text-gray-500 shrink-0"
+         fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2"
+              d="m6 9 6 6 6-6"/>
+    </svg>
+</button>
 
-                    <a href="#"
-                       class="text-gray-600 hover:text-emerald-600 transition">
-                        Jelajahi
-                    </a>
+            <!-- Pencarian -->
+            <div class="relative flex-1 min-w-[200px]">
+                <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2" d="m16 16 4 4"/>
+                </svg>
+                <input type="text" id="navbarSearch"
+                    placeholder="Cari barang preloved..."
+                    class="w-full border border-gray-300 rounded-xl pl-11 pr-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
 
-                    <a href="#kategori"
-                       class="text-gray-600 hover:text-emerald-600 transition">
-                        Kategori
-                    </a>
-
-                    <a href="#penjual"
-                       class="text-gray-600 hover:text-emerald-600 transition">
-                        Tentang
-                    </a>
-
-                    <a href="#blog"
-                       class="text-gray-600 hover:text-emerald-600 transition">
-                        Blog
-                    </a>
-
-                </nav>
-
-
-<!-- Right Navigation -->
-                <div class="hidden md:flex items-center gap-8">
-
-                    <!-- Search -->
-                    <div class="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                        class="w-5 h-5 absolute left-3 top-1/2
-                        -translate-y-1/2 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m21 21-4.35-4.35m2.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-                        
-                        <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Cari..."
-                        class="w-36 bg-gray-100
-                            border border-gray-200
-                            rounded-full
-                            text-gray-800 text-sm
-                            pl-10 pr-3 py-1.5
-                            outline-none
-                            focus:border-emerald-500 focus:bg-white
-                            transition">
-                    </div>
-
-
-                    <!-- Admin (TAMBAHAN TOMBOL DASHBOARD) -->
-                    <!-- Admin -->
-                    <a href="{{ route('admin.login') }}"
-                    class="text-emerald-700 bg-emerald-50 border border-emerald-200 
-                            hover:bg-emerald-600 hover:text-white 
-                            font-semibold px-4 py-2 rounded-xl transition">
-                        Admin
-                    </a>
-
-
-                                    <!-- Masuk -->
+            <!-- Login / Daftar -->
+            <div class="whitespace-nowrap">
+                @guest
                     <a href="{{ route('login') }}"
-                    class="text-gray-600 hover:text-gray-900 transition font-medium">
-                        Masuk
+                       class="text-gray-700 hover:text-emerald-700 font-semibold text-sm">
+                        Masuk/Daftar
                     </a>
+                @else
+                    <span class="text-gray-700 text-sm font-medium">
+                        {{ auth()->user()->name }}
+                    </span>
+                @endguest
+            </div>
 
+            <!-- Jual -->
+            <a href="{{ route('login') }}"
+               class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl transition whitespace-nowrap">
+                <span class="text-xl leading-none">+</span> Jual
+            </a>
 
-                    <!-- Jual -->
-                    <a href="#"
-                       class="bg-emerald-600 hover:bg-emerald-700
-                              text-white font-bold
-                              px-6 py-2.5 rounded-xl shadow-sm hover:shadow
-                              transition">
-                        + Jual
-                    </a>
+        </div>
+    </div>
 
+    <!-- Popup Peta -->
+    <div id="locationPanel"
+         class="hidden absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl">
+        <div class="max-w-5xl mx-auto p-5">
+
+            <div class="flex justify-between items-center gap-3 mb-4">
+                <div>
+                    <h3 class="font-bold text-gray-900 text-lg">
+                        Pilih Lokasi
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Cari tempat atau pilih titik pada peta.
+                    </p>
                 </div>
+                <button type="button" id="closeLocation"
+                    class="text-gray-500 hover:text-gray-900 text-3xl leading-none"
+                    aria-label="Tutup peta">&times;</button>
+            </div>
 
+            <!-- Cari tempat -->
+            <form id="locationSearchForm" class="flex gap-2 mb-3">
+                <input type="text" id="locationSearchInput"
+                    placeholder="Contoh: Jakabaring, Palembang"
+                    class="flex-1 min-w-0 border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-emerald-500">
+                <button type="submit"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg text-sm font-semibold">
+                    Cari
+                </button>
+            </form>
+
+           
+
+            <p id="locationMessage" role="status"
+               class="text-sm text-gray-500 mb-3">
+                Memuat peta...
+            </p>
+
+            <!-- Peta OpenStreetMap -->
+            <div id="locationMap"
+                 class="w-full h-[350px] rounded-xl border border-gray-200 z-0">
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
+                <p id="locationCoordinates"
+                   class="text-xs text-gray-500">
+                    Belum ada titik lokasi yang dipilih.
+                </p>
+                <button type="button" id="confirmLocation"
+                    disabled
+                    class="bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold px-5 py-3 rounded-lg text-sm">
+                    Gunakan Lokasi Ini
+                </button>
             </div>
 
         </div>
+    </div>
+</header>
 
-    </header>
+<!-- Leaflet: library untuk menampilkan peta interaktif -->
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""/>
 
-    <!-- ================= HERO ================= -->
-    <section class="relative overflow-hidden bg-amber-50/50">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""></script>
 
-        <!-- Background -->
-        <div
-            class="absolute inset-0 bg-cover bg-center opacity-15"
-            style="background-image: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1800&auto=format&fit=crop');">
-        </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const openButton = document.getElementById('openLocation');
+    const closeButton = document.getElementById('closeLocation');
+    const panel = document.getElementById('locationPanel');
+    const mapElement = document.getElementById('locationMap');
+    const searchForm = document.getElementById('locationSearchForm');
+    const searchInput = document.getElementById('locationSearchInput');
+    const message = document.getElementById('locationMessage');
+    const coordinates = document.getElementById('locationCoordinates');
+    const confirmButton = document.getElementById('confirmLocation');
+    const selectedLocation = document.getElementById('selectedLocation');
+    const navbarSearch = document.getElementById('navbarSearch');
+    const catalogSearch = document.getElementById('searchProduct');
 
-        <!-- Overlay Gradient Cerah -->
-        <div class="absolute inset-0 bg-gradient-to-r
-                    from-amber-50 via-amber-50/90
-                    to-transparent">
-        </div>
+    let map = null;
+    let marker = null;
+    let chosenPlace = '';
+    let chosenLat = null;
+    let chosenLng = null;
 
-        <!-- Hero Content -->
-        <div class="relative max-w-7xl mx-auto px-6">
+    // Sinkronkan pencarian navbar dengan pencarian katalog yang sudah ada.
+    if (navbarSearch && catalogSearch) {
+        navbarSearch.addEventListener('input', function () {
+            catalogSearch.value = this.value;
+            catalogSearch.dispatchEvent(new Event('input', {
+                bubbles: true
+            }));
+        });
 
-            <div class="min-h-[480px] flex items-center">
+        catalogSearch.addEventListener('input', function () {
+            navbarSearch.value = this.value;
+        });
+    }
 
-                <div class="max-w-xl">
+    function selectPoint(lat, lng, place = '') {
+        chosenLat = lat;
+        chosenLng = lng;
+        chosenPlace = place;
 
-                    <p class="text-amber-700 font-bold tracking-[0.25em]
-                              text-sm mb-4 uppercase">
-                        SECONDHAND MARKETPLACE
-                    </p>
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
 
-                    <h1 class="text-5xl md:text-6xl font-black
-                               leading-tight tracking-tight text-gray-900">
+        coordinates.textContent =
+            `Koordinat: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 
-                        <span class="text-emerald-600">RE</span><span class="text-amber-600">USE</span>
-                        <br>
-                        <span class="text-gray-900">MARKET</span>
+        confirmButton.disabled = false;
+        message.textContent = place
+            ? `Lokasi dipilih: ${place}`
+            : 'Titik dipilih. Klik "Gunakan Lokasi Ini" untuk mengonfirmasi.';
+    }
 
-                    </h1>
+    function initializeMap() {
+        if (map) {
+            setTimeout(() => map.invalidateSize(), 150);
+            return;
+        }
 
-                    <p class="text-gray-600 text-lg md:text-xl
-                              mt-5 max-w-lg leading-relaxed">
+        if (typeof L === 'undefined') {
+            message.textContent =
+                'Peta gagal dimuat. Periksa koneksi internet lalu coba lagi.';
+            return;
+        }
 
-                        Platform jual beli barang bekas berkualitas.
-                        Temukan barang preloved terbaik dengan harga terjangkau.
+        // Tampilan awal di Palembang; pengguna bebas memilih lokasi lain.
+        map = L.map(mapElement).setView([-2.9761, 104.7754], 12);
 
-                    </p>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+            maxZoom: 19
+        }).addTo(map);
 
-                    <a
-                        href="#katalog"
-                        class="inline-flex items-center gap-2
-                               mt-8
-                               bg-amber-500 hover:bg-amber-600
-                               text-white font-bold
-                               px-7 py-3.5
-                               rounded-full shadow-md hover:shadow-lg
-                               transition duration-300
-                               hover:scale-105">
+        map.on('click', function (event) {
+            selectPoint(event.latlng.lat, event.latlng.lng);
+        });
 
-                        Jelajahi Sekarang
+        message.textContent =
+            'Klik pada peta untuk memilih titik lokasi.';
+    }
 
-                        <span class="text-lg">→</span>
+    openButton.addEventListener('click', function () {
+        panel.classList.toggle('hidden');
 
+        if (!panel.classList.contains('hidden')) {
+            initializeMap();
+        }
+    });
+
+    closeButton.addEventListener('click', function () {
+        panel.classList.add('hidden');
+    });
+
+    // Cari tempat secara manual menggunakan Nominatim.
+    searchForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const query = searchInput.value.trim();
+
+        if (!query) {
+            message.textContent = 'Masukkan nama kota atau tempat terlebih dahulu.';
+            return;
+        }
+
+        initializeMap();
+
+        if (!map) return;
+
+        message.textContent = 'Sedang mencari lokasi...';
+
+        try {
+            const url = new URL(
+                'https://nominatim.openstreetmap.org/search'
+            );
+
+            url.searchParams.set('q', query);
+            url.searchParams.set('format', 'jsonv2');
+            url.searchParams.set('limit', '1');
+            url.searchParams.set('accept-language', 'id');
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Pencarian lokasi gagal.');
+            }
+
+            const results = await response.json();
+
+            if (!results.length) {
+                message.textContent = 'Lokasi tidak ditemukan. Coba kata kunci lain.';
+                return;
+            }
+
+            const result = results[0];
+            const lat = Number(result.lat);
+            const lng = Number(result.lon);
+
+            map.setView([lat, lng], 15);
+            selectPoint(lat, lng, result.display_name);
+        } catch (error) {
+            message.textContent =
+                'Tidak dapat mencari lokasi. Periksa koneksi internet dan coba lagi.';
+        }
+    });
+
+    // Lokasi perangkat hanya diakses jika pengguna menekan tombol ini.
+    document.getElementById('myLocationButton')
+        .addEventListener('click', function () {
+            initializeMap();
+
+            if (!map) return;
+
+            if (!navigator.geolocation) {
+                message.textContent =
+                    'Browser ini tidak mendukung fitur lokasi.';
+                return;
+            }
+
+            message.textContent = 'Meminta izin lokasi perangkat...';
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    map.setView([lat, lng], 16);
+                    selectPoint(lat, lng, 'Lokasi perangkat');
+                },
+                function () {
+                    message.textContent =
+                        'Lokasi tidak tersedia. Izinkan akses lokasi atau pilih titik pada peta.';
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        });
+
+    confirmButton.addEventListener('click', function () {
+        if (chosenLat === null || chosenLng === null) return;
+
+        const displayPlace = chosenPlace
+            ? chosenPlace.split(',').slice(0, 2).join(', ')
+            : `${chosenLat.toFixed(5)}, ${chosenLng.toFixed(5)}`;
+
+        selectedLocation.textContent = displayPlace;
+        selectedLocation.title = chosenPlace || displayPlace;
+
+        // Simpan sementara selama halaman masih terbuka.
+        window.reuseMarketLocation = {
+            name: chosenPlace,
+            latitude: chosenLat,
+            longitude: chosenLng
+        };
+
+        panel.classList.add('hidden');
+    });
+});
+</script>
+
+<!-- ================= HERO REUSEMARKET ================= -->
+<section class="relative isolate overflow-hidden bg-white
+                min-h-[calc(100vh-86px)]">
+    <!-- Foto produk di latar belakang -->
+    <div
+        class="absolute inset-0 -z-20 bg-cover bg-center"
+        style="background-image: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1800&auto=format&fit=crop');">
+    </div>
+<!-- Gradasi cream ke oranye lembut -->
+<div class="absolute inset-0 -z-10
+    bg-gradient-to-r
+    from-amber-50
+    via-orange-50/90
+    to-orange-100/30">
+</div>
+
+    <!-- Konten Hero -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="min-h-[400px] sm:min-h-[440px] md:min-h-[480px]
+                    flex items-center py-14 md:py-20">
+
+            <div class="max-w-xl">
+
+                <p class="text-emerald-700 font-bold
+                          tracking-[0.2em] text-xs sm:text-sm
+                          mb-4 uppercase">
+                    SECONDHAND MARKETPLACE
+                </p>
+
+                <h1 class="text-4xl sm:text-5xl md:text-6xl
+                           font-black leading-tight tracking-tight
+                           text-gray-900">
+                    Barang Lama,
+                    <span class="text-emerald-600">
+                        Cerita Baru.
+                    </span>
+                </h1>
+
+                <p class="text-gray-600 text-base md:text-lg
+                          mt-5 max-w-lg leading-relaxed">
+                    Temukan barang preloved berkualitas dengan
+                    harga terjangkau. Beri barang lama kesempatan
+                    untuk memiliki cerita baru.
+                </p>
+
+                <div class="flex flex-wrap gap-3 mt-8">
+
+                    <a href="#katalog"
+                       class="inline-flex items-center gap-2
+                              bg-emerald-600 hover:bg-emerald-700
+                              text-white font-bold px-6 py-3.5
+                              rounded-full shadow-sm transition">
+                        Jelajahi Barang <span>→</span>
+                    </a>
+
+                    <a href="{{ route('login') }}"
+                       class="inline-flex items-center
+                              border border-emerald-600
+                              text-emerald-700 hover:bg-emerald-50
+                              font-bold px-6 py-3.5
+                              rounded-full transition">
+                        Mulai Jual
                     </a>
 
                 </div>
-
             </div>
-
         </div>
+    </div>
+</section>
 
-    </section>
 
 
     <!-- ================= SEARCH & CATEGORY ================= -->
     <section id="kategori"
              class="bg-gray-50 px-6 pt-12 pb-4">
-
         <div class="max-w-4xl mx-auto">
+            
+        <!-- Search Icon -->
+         <svg
+         class="absolute left-5 top-4 w-6 h-6 text-gray-400"
+         fill="none"
+         stroke="currentColor"
+         viewBox="0 0 24 24">
+         <path
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         stroke-width="2"
+         d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/>
+        </svg>
+    </div>
+    
+    
+    <!-- Category Buttons -->
+     <div class="flex flex-wrap justify-center gap-3 mt-6">
+            <button
+            data-category="all"
+            class="category-btn active-category
+            px-6 py-2.5 rounded-full
+            bg-amber-500 text-whith
+            font-semibold text-sm shadow-sm
+            transition">
+            ⊞ &nbsp; Semua
+    </button>
 
-            <!-- Search -->
-            <div class="relative shadow-sm rounded-full">
-
-                <input
-                    type="text"
-                    id="searchProduct"
-                    placeholder="Cari barang yang kamu butuhkan..."
-                    class="w-full
-                           bg-white
-                           border border-gray-300
-                           rounded-full
-                           px-6 py-4 pl-14
-                           text-gray-800
-                           placeholder-gray-400
-                           focus:outline-none
-                           focus:border-amber-500 focus:ring-2 focus:ring-amber-200
-                           transition"
-                >
-
-                <!-- Search Icon -->
-                <svg
-                    class="absolute left-5 top-4 w-6 h-6 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
-                    />
-                </svg>
-
-            </div>
-
-
-            <!-- Category Buttons -->
-            <div class="flex flex-wrap justify-center gap-3 mt-6">
-
-                <button
-                    data-category="all"
-                    class="category-btn active-category
-                           px-6 py-2.5 rounded-full
-                           bg-amber-500 text-white
-                           font-semibold text-sm shadow-sm
-                           transition">
-
-                    ⊞ &nbsp; Semua
-
-                </button>
-
-                <button
-                    data-category="fashion"
-                    class="category-btn
-                           px-6 py-2.5 rounded-full
-                           bg-white border border-gray-300
-                           text-gray-700 hover:bg-gray-50
-                           hover:border-amber-500
-                           hover:text-amber-600
-                           transition">
-
-                    ♧ &nbsp; Fashion
-
-                </button>
-
-                <button
-                    data-category="elektronik"
-                    class="category-btn
-                           px-6 py-2.5 rounded-full
-                           bg-white border border-gray-300
-                           text-gray-700 hover:bg-gray-50
-                           hover:border-amber-500
-                           hover:text-amber-600
-                           transition">
-
-                    ▣ &nbsp; Elektronik
-
-                </button>
-
-                <button
-                    data-category="buku"
-                    class="category-btn
-                           px-6 py-2.5 rounded-full
-                           bg-white border border-gray-300
-                           text-gray-700 hover:bg-gray-50
-                           hover:border-amber-500
-                           hover:text-amber-600
-                           transition">
-
-                    ▤ &nbsp; Buku
-
-                </button>
-
-                <button
-                    data-category="furniture"
-                    class="category-btn
-                           px-6 py-2.5 rounded-full
-                           bg-white border border-gray-300
-                           text-gray-700 hover:bg-gray-50
-                           hover:border-amber-500
-                           hover:text-amber-600
-                           transition">
-
-                    ▱ &nbsp; Furniture
-
-                </button>
-
-                <button
-                    data-category="lainnya"
-                    class="category-btn
-                           px-6 py-2.5 rounded-full
-                           bg-white border border-gray-300
-                           text-gray-700 hover:bg-gray-50
-                           hover:border-amber-500
-                           hover:text-amber-600
-                           transition">
-
-                    ••• &nbsp; Lainnya
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
+         <button
+            data-category="fashion"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-amber-500
+            hover:text-amber-600
+            transition">
+            ♧ &nbsp; Fashion
+        </button>
+    
+        <button
+            data-category="elektronik"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-amber-500
+            hover:text-amber-600
+            transition">
+            ▣ &nbsp; Elektronik
+        </button>
+    
+    
+        <button
+            data-category="buku"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-amber-500
+            hover:text-amber-600
+            transition">
+            ▤ &nbsp; Buku
+        </button>
+    
+    
+        <button
+            data-category="furniture"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-amber-500
+            hover:text-amber-600
+            transition">
+            ▱ &nbsp; Furniture
+        </button>
+    
+        <button
+            data-category="lainnya"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-amber-500
+            hover:text-amber-600
+            transition">
+            ••• &nbsp; Lainnya
+        </button>
+    </div>
+</div>
+</section>
 
 
     <!-- ================= KATALOG ================= -->
@@ -387,26 +591,28 @@
 
 
         <!-- Product Grid -->
-        <div
-            id="productGrid"
-            class="flex overflow-x-auto space-x-6 pb-6 pt-2 scrollbar-hide snap-x snap-mandatory">
-
-            @foreach($products as $product)
-
-                <div
-                    class="product-card group flex-none w-[280px] sm:w-[320px] snap-start
-                        bg-white
-                        border border-gray-200
-                        rounded-2xl
-                        overflow-hidden shadow-sm hover:shadow-lg
-                        hover:border-amber-400
-                        hover:-translate-y-1
-                        transition-all duration-300"
-
-                    data-product-name="{{ strtolower($product->name) }}"
-                    data-product-description="{{ strtolower($product->description) }}"
-                    data-product-condition="{{ strtolower($product->condition) }}"
-                >
+       <div
+    id="productGrid"
+    class="grid grid-cols-2 lg:grid-cols-4 gap-5 pb-6 pt-2">
+    @foreach($products as $product)
+    
+    
+    <div
+        class="product-card group min-w-0
+            bg-white
+            border border-gray-200
+            rounded-2xl
+            overflow-hidden shadow-sm hover:shadow-lg
+            hover:border-amber-400
+            hover:-translate-y-1
+            transition-all duration-300"
+            
+            data-product-name="{{ strtolower($product->name) }}"
+            data-product-description="{{ strtolower($product->description) }}"
+            data-product-condition="{{ strtolower($product->condition) }}"
+            data-product-category="{{ strtolower($product->category->name ?? '') }}"
+            
+            >
 
                     <!-- Image -->
                     <div class="relative overflow-hidden bg-gray-100">

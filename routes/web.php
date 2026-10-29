@@ -8,6 +8,7 @@ use App\Http\Controllers\IncomingGoodController;
 use App\Http\Controllers\OutgoingGoodController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegotiationController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,16 @@ Route::get('/', [ProductController::class, 'home'])
 Route::get('/beranda', function () {
     return redirect()->route('home');
 })->name('beranda');
+
+
+Route::middleware(['auth'])->group(function () {
+    // WAJIB PALING ATAS
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+    // Rute lain yang pakai parameter taruh di bawahnya
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+});
 
 
 /*
@@ -142,3 +153,23 @@ Route::middleware('auth')->group(function () {
 // Detail produk bisa dilihat tanpa login
 Route::get('/products/{product}', [ProductController::class, 'show'])
     ->name('products.show');
+
+
+    Route::middleware(['auth'])->group(function () {
+    // 1. Inbox & Kirim Pesan Teks
+    Route::get('/inbox', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/{id}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+
+    // 2. TAMBAHKAN INI: Memulai/Membuka Chat dari Halaman Produk
+    Route::post('/chat/start/{productId}', [ChatController::class, 'startConversation'])->name('chat.start');
+
+    // 3. TAMBAHKAN INI: Menampilkan Halaman Ruang Obrolan Detail
+    Route::get('/chat/{id}', [ChatController::class, 'showChat'])->name('chat.show');
+
+    // 4. TAMBAHKAN INI: Mengirim Penawaran Harga (Nego)
+    Route::post('/chat/{id}/offer', [ChatController::class, 'sendOffer'])->name('chat.offer');
+
+    // 5. TAMBAHKAN INI: Penjual Terima / Tolak Tawaran
+    Route::post('/offer/{messageId}/status', [ChatController::class, 'updateOfferStatus'])->name('offer.status');
+});
+

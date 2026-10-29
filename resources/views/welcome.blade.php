@@ -97,10 +97,23 @@
             </div>
 
             <!-- Jual -->
-            <a href="{{ route('login') }}"
-               class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl transition whitespace-nowrap">
-                <span class="text-xl leading-none">+</span> Jual
-            </a>
+            <div class="flex items-center">
+                <a href="{{ route('dashboard') }}" class="p-2 text-slate-700 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition" title="Menu Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="{{ route('products.create') }}" class="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold shadow-sm transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg>
+                    Jual
+                </a>
+            </div>
+            
 
         </div>
     </div>

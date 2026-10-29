@@ -71,16 +71,25 @@
                 </div>
 
                 <!-- Tombol Aksi Utamanya -->
-                <div class="space-y-2 pt-1">
-                    <button class="w-full py-3.5 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-all duration-300 flex items-center justify-center gap-2.5 hover:-translate-y-0.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 005.474 5.474l.772-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                        </svg>
-                        Hubungi Penjual Sekarang
+                <!-- Badge Lokasi Barang -->
+                <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium my-2">
+                    <span>📍 {{ $product->location ?? 'Palembang' }}</span>
+                </div>
+
+                <!-- Grid Tombol Aksi: Chat & Nego -->
+                <div class="grid grid-cols-2 gap-3 pt-3">
+                    <!-- Tombol 1: Chat Penjual -->
+                    <form action="{{ route('chat.start', $product->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                            💬 Chat Penjual
+                        </button>
+                    </form>
+
+                    <!-- Tombol 2: Ajukan Nego -->
+                    <button onclick="openNegoModal()" class="w-full py-3 px-4 bg-white border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                        🤝 Ajukan Nego
                     </button>
-                    <p class="text-[11px] text-center text-slate-400">
-                        🔒 Transaksi langsung dengan pemilik barang secara aman.
-                    </p>
                 </div>
             </div>
 

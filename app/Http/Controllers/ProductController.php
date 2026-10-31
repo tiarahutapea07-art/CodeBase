@@ -31,12 +31,23 @@ class ProductController extends Controller
         ));
     }
 
-    // HALAMAN DATA BARANG (Kelola CRUD)
-    public function index()
+   // HALAMAN DATA BARANG (Kelola CRUD)
+    public function index(Request $request)
     {
-        $products = Product::with('user')->latest()->get();
+        $query = Product::with('user')->latest();
 
-        return view('products.index', compact('products'));
+        if ($request->filter == 'jual') {
+            $query->where('price', '>', 0);
+        } elseif ($request->filter == 'donasi') {
+            $query->where('price', 0);
+        }
+
+        $products = $query->get();
+
+        // Mengambil daftar kategori barang
+        $categories = Category::orderBy('name')->get();
+
+        return view('products.index', compact('products', 'categories'));
     }
 
     // TAMBAH BARANG
@@ -44,19 +55,29 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'price'       => 'required|numeric|min:0',
+            'type'        => 'required|in:jual,donasi',
+            'category_id' => 'required|exists:categories,id',
+            'price'       => 'required_if:type,jual|nullable|numeric|min:1',
             'condition'   => 'required|string',
             'description' => 'nullable|string',
-            'image_url'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
+        // Jika barang donasi, harga otomatis 0
+        if ($validated['type'] === 'donasi') {
+            $validated['price'] = 0;
+        }
+
         // Upload gambar dari laptop
-        if ($request->hasFile('image_url')) {
-            $validated['image_url'] = $request->file('image_url')
+        if ($request->hasFile('image')) {
+            $validated['image_url'] = $request->file('image')
                 ->store('products', 'public');
         }
 
-        // Menyimpan ID user yang menambahkan barang
+        // Menghapus field yang tidak ada di tabel products
+        unset($validated['image'], $validated['type']);
+
+        // Menyimpan ID user
         $validated['user_id'] = auth()->id();
 
         Product::create($validated);
@@ -65,6 +86,7 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Barang berhasil ditambahkan!');
     }
+
 
     // EDIT DATA
     public function edit(Product $product)
@@ -77,24 +99,34 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'price'       => 'required|numeric|min:0',
+            'type'        => 'required|in:jual,donasi',
+            'category_id' => 'required|exists:categories,id',
+            'price'       => 'required_if:type,jual|nullable|numeric|min:1',
             'condition'   => 'required|string',
             'description' => 'nullable|string',
-            'image_url'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        // Kalau user memilih gambar baru
-        if ($request->hasFile('image_url')) {
+        // Jika barang donasi, harga otomatis menjadi 0
+        if ($validated['type'] === 'donasi') {
+            $validated['price'] = 0;
+        }
 
-            // Hapus gambar lama
-            if ($product->image_url) {
+        // Jika user memilih gambar baru
+        if ($request->hasFile('image')) {
+
+            // Hapus gambar lama jika tersimpan di folder products
+            if ($product->image_url && str_starts_with($product->image_url, 'products/')) {
                 Storage::disk('public')->delete($product->image_url);
             }
 
             // Simpan gambar baru
-            $validated['image_url'] = $request->file('image_url')
+            $validated['image_url'] = $request->file('image')
                 ->store('products', 'public');
         }
+
+        // Hapus type dan image karena bukan kolom tabel products
+        unset($validated['type'], $validated['image']);
 
         $product->update($validated);
 
@@ -102,7 +134,6 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Barang berhasil diperbarui!');
     }
-
     // HAPUS BARANG
     public function destroy(Product $product)
     {
@@ -130,10 +161,11 @@ class ProductController extends Controller
     }
 
     public function create()
-{
-    return view('products.create');
-}
+    {
+        $categories = Category::orderBy('name')->get();
 
+        return view('products.create', compact('categories'));
+    }
 
     
 }

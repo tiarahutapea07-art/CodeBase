@@ -478,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     <!-- Category Buttons -->
      <div class="flex flex-wrap justify-center gap-3 mt-6">
-            <button
+         <button
             data-category="all"
             class="category-btn active-category
             px-6 py-2.5 rounded-full
@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
             font-semibold text-sm shadow-sm
             transition">
             ⊞ &nbsp; Semua
-    </button>
+        </button>
 
          <button
             data-category="fashion"
@@ -549,6 +549,17 @@ document.addEventListener('DOMContentLoaded', function () {
             transition">
             ••• &nbsp; Lainnya
         </button>
+        <button
+            data-category="donasi"
+            class="category-btn
+            px-6 py-2.5 rounded-full
+            bg-white border border-gray-300
+            text-gray-700 hover:bg-gray-50
+            hover:border-emerald-500
+            hover:text-emerald-600
+            transition">
+            ♡ &nbsp; Donasi
+        </button>
     </div>
 </div>
 </section>
@@ -589,16 +600,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
             </div>
 
-            <p class="text-sm text-gray-500">
+            <div class="flex flex-wrap items-center gap-3">
 
-                Menampilkan
-                <span id="productCount"
-                      class="text-amber-600 font-bold">
-                    {{ $products->count() }}
-                </span>
-                barang
+                <!-- Dropdown Kategori Donasi -->
+                <div id="donationCategoryFilter" class="hidden">
+                    <select id="donationCategory"
+                        class="border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white text-gray-700">
 
-            </p>
+                        <option value="all">Semua Kategori</option>
+                        <option value="buku">Buku</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="elektronik">Elektronik</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="lainnya">Lainnya</option>
+
+                    </select>
+                </div>
+
+                <!-- Jumlah Barang -->
+                <p class="text-sm text-gray-500">
+                    Menampilkan
+                    <span id="productCount" class="text-amber-600 font-bold">
+                        {{ $products->count() }}
+                    </span>
+                    barang
+                </p>
+
+            </div>
 
         </div>
 
@@ -624,34 +652,34 @@ document.addEventListener('DOMContentLoaded', function () {
             data-product-description="{{ strtolower($product->description) }}"
             data-product-condition="{{ strtolower($product->condition) }}"
             data-product-category="{{ strtolower($product->category->name ?? '') }}"
+            data-product-type="{{ $product->price == 0 ? 'donasi' : 'jual' }}"
             
             >
 
                     <!-- Image -->
                     <div class="relative overflow-hidden bg-gray-100">
 
-                        <img
-                            src="{{ asset($product->image_url) }}"
+                       <img
+                            src="{{ str_starts_with($product->image_url ?? '', 'products/')
+                                ? asset('storage/' . $product->image_url)
+                                : asset($product->image_url) }}"
                             alt="{{ $product->name }}"
                             class="w-full h-56
-                                   object-cover
-                                   group-hover:scale-105
-                                   transition duration-500"
+                                object-cover
+                                group-hover:scale-105
+                                transition duration-500"
                         >
 
-                        <!-- Preloved Badge -->
-                        <span
-                            class="absolute top-3 left-3
-                                   bg-amber-500
-                                   text-white
-                                   text-[11px]
-                                   font-bold
-                                   px-3 py-1
-                                   rounded-full shadow">
-
-                            PRELOVED
-
-                        </span>
+                        <!-- Badge Jenis Barang -->
+                        @if($product->price == 0)
+                            <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+                                DONASI
+                            </span>
+                        @else
+                            <span class="absolute top-3 left-3 bg-amber-500 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow">
+                                PRELOVED
+                            </span>
+                        @endif
 
                         <!-- Favorite -->
                         <button
@@ -733,14 +761,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 </p>
 
-                                <p
-                                    class="text-amber-600
-                                           font-extrabold
-                                           text-lg">
-
-                                    Rp {{ number_format($product->price, 0, ',', '.') }}
-
-                                </p>
+                                @if($product->price == 0)
+                                    <p class="text-emerald-600 font-extrabold text-lg">
+                                        GRATIS
+                                    </p>
+                                @else
+                                    <p class="text-amber-600 font-extrabold text-lg">
+                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    </p>
+                                @endif
 
                             </div>
 
@@ -1002,32 +1031,42 @@ document.addEventListener('DOMContentLoaded', function () {
         const emptyMessage = document.getElementById('emptyMessage');
         const categoryButtons = document.querySelectorAll('.category-btn');
 
+        const donationCategoryFilter = document.getElementById('donationCategoryFilter');
+        const donationCategory = document.getElementById('donationCategory');
+
         let selectedCategory = 'all';
 
         function filterProducts() {
-            const keyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const keyword = searchInput
+                ? searchInput.value.toLowerCase().trim()
+                : '';
+
+            const selectedDonationCategory = donationCategory
+                ? donationCategory.value
+                : 'all';
+
             let visibleProducts = 0;
 
             productCards.forEach(card => {
                 const name = card.dataset.productName || '';
                 const description = card.dataset.productDescription || '';
                 const condition = card.dataset.productCondition || '';
+                const category = (card.dataset.productCategory || '').toLowerCase();
+                const type = card.dataset.productType || '';
 
-                const text = `${name} ${description} ${condition}`;
+                const text = `${name} ${description} ${condition} ${category}`;
+
                 let categoryMatch = true;
 
-                if (selectedCategory !== 'all') {
-                    if (selectedCategory === 'fashion') {
-                        categoryMatch = /baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion/.test(text);
-                    } else if (selectedCategory === 'elektronik') {
-                        categoryMatch = /laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik/.test(text);
-                    } else if (selectedCategory === 'buku') {
-                        categoryMatch = /buku|novel|komik|majalah/.test(text);
-                    } else if (selectedCategory === 'furniture') {
-                        categoryMatch = /kursi|meja|lemari|rak|sofa|furniture/.test(text);
-                    } else if (selectedCategory === 'lainnya') {
-                        categoryMatch = !/baju|kaos|kemeja|jaket|hoodie|celana|sepatu|tas|fashion|laptop|hp|handphone|smartphone|kamera|earphone|headset|elektronik|buku|novel|komik|majalah|kursi|meja|lemari|rak|sofa|furniture/.test(text);
+                if (selectedCategory === 'donasi') {
+                    categoryMatch = type === 'donasi';
+
+                    if (selectedDonationCategory !== 'all') {
+                        categoryMatch = categoryMatch &&
+                            category === selectedDonationCategory;
                     }
+                } else if (selectedCategory !== 'all') {
+                    categoryMatch = category === selectedCategory;
                 }
 
                 const searchMatch = text.includes(keyword);
@@ -1040,14 +1079,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            if (productCount) productCount.textContent = visibleProducts;
+            if (productCount) {
+                productCount.textContent = visibleProducts;
+            }
 
             if (emptyMessage) {
-                if (visibleProducts === 0) {
-                    emptyMessage.classList.remove('hidden');
-                } else {
-                    emptyMessage.classList.add('hidden');
-                }
+                emptyMessage.classList.toggle('hidden', visibleProducts > 0);
+            }
+
+            if (donationCategoryFilter) {
+                donationCategoryFilter.classList.toggle(
+                    'hidden',
+                    selectedCategory !== 'donasi'
+                );
             }
         }
 
@@ -1055,22 +1099,46 @@ document.addEventListener('DOMContentLoaded', function () {
             searchInput.addEventListener('input', filterProducts);
         }
 
+        if (donationCategory) {
+            donationCategory.addEventListener('change', filterProducts);
+        }
+
         categoryButtons.forEach(button => {
             button.addEventListener('click', function () {
                 selectedCategory = this.dataset.category;
 
                 categoryButtons.forEach(btn => {
-                    btn.classList.remove('active-category', 'bg-amber-500', 'text-white', 'shadow-sm');
-                    btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                    btn.classList.remove(
+                        'active-category',
+                        'bg-amber-500',
+                        'text-white',
+                        'shadow-sm'
+                    );
+
+                    btn.classList.add(
+                        'bg-white',
+                        'border',
+                        'border-gray-300',
+                        'text-gray-700'
+                    );
                 });
 
-                this.classList.add('active-category', 'bg-amber-500', 'text-white', 'shadow-sm');
-                this.classList.remove('bg-white', 'border-gray-300', 'text-gray-700');
+                this.classList.add(
+                    'active-category',
+                    'bg-amber-500',
+                    'text-white',
+                    'shadow-sm'
+                );
+
+                this.classList.remove(
+                    'bg-white',
+                    'border-gray-300',
+                    'text-gray-700'
+                );
 
                 filterProducts();
             });
         });
-
         // ==========================================
         // EVENT LISTENER MODAL DETAIL (AMAN & ANTI-ERROR)
         // ==========================================

@@ -37,9 +37,11 @@
             <!-- Foto Produk -->
             <div class="md:col-span-5">
                 <div class="relative group aspect-square rounded-2xl overflow-hidden bg-slate-50 border border-slate-100">
-                    <img 
-                        src="{{ asset($product->image_url ?? 'images/' . $product->image) }}" 
-                        alt="{{ $product->name }}" 
+                    <img
+                        src="{{ str_starts_with($product->image_url ?? '', 'products/')
+                            ? asset('storage/' . $product->image_url)
+                            : asset($product->image_url ?? 'images/' . $product->image) }}"
+                        alt="{{ $product->name }}"
                         class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                     >
                     <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-amber-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-amber-200/50 shadow-sm uppercase tracking-wider">
@@ -75,21 +77,24 @@
                 <div class="flex items-center gap-1.5 text-slate-500 text-xs font-medium my-2">
                     <span>📍 {{ $product->location ?? 'Palembang' }}</span>
                 </div>
-
                 <!-- Grid Tombol Aksi: Chat & Nego -->
-                <div class="grid grid-cols-2 gap-3 pt-3">
+                <div class="{{ $product->price == 0 ? 'grid-cols-1' : 'grid-cols-2' }} grid gap-3 pt-3">
+
                     <!-- Tombol 1: Chat Penjual -->
                     <form action="{{ route('chat.start', $product->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full py-3 px-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
-                            💬 Chat Penjual
+                            💬 {{ $product->price == 0 ? 'Hubungi Pemberi Donasi' : 'Chat Penjual' }}
                         </button>
                     </form>
 
-                    <!-- Tombol 2: Ajukan Nego -->
-                    <button onclick="openNegoModal()" class="w-full py-3 px-4 bg-white border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
-                        🤝 Ajukan Nego
-                    </button>
+                    <!-- Tombol 2: Ajukan Nego (Khusus Barang Jual) -->
+                    @if($product->price > 0)
+                        <button onclick="openNegoModal()" class="w-full py-3 px-4 bg-white border-2 border-amber-500 text-amber-600 hover:bg-amber-50 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                            🤝 Ajukan Nego
+                        </button>
+                    @endif
+
                 </div>
             </div>
 

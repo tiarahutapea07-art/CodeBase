@@ -89,21 +89,89 @@
                        class="text-gray-700 hover:text-emerald-700 font-semibold text-sm">
                         Masuk/Daftar
                     </a>
-                @else
-                    <span class="text-gray-700 text-sm font-medium">
-                        {{ auth()->user()->name }}
+              
                     </span>
                 @endguest
             </div>
 
-            <!-- Jual -->
-            <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="p-2 text-slate-700 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition" title="Menu Dashboard">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
+           
+<!-- MENU / FOTO PROFIL -->
+<div class="flex items-center">
+
+    @guest
+        <!-- Jika belum login: tampilkan garis tiga -->
+        <a href="{{ route('dashboard') }}"
+           class="p-2 text-slate-700 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition"
+           title="Menu Dashboard">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor"
+                 class="w-6 h-6">
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+            </svg>
+        </a>
+    @endguest
+
+    @auth
+        <!-- Jika sudah login: tampilkan foto profil berbentuk lingkaran -->
+        <details class="relative">
+
+            <summary
+                class="list-none cursor-pointer w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg flex items-center justify-center shadow-sm transition select-none"
+                title="Menu Profil">
+
+                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+
+            </summary>
+
+            <!-- Dropdown Profil -->
+            <div class="absolute right-0 top-12 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-[100]">
+
+                <!-- Informasi Pengguna -->
+                <div class="px-4 py-3 border-b border-gray-100">
+                    <p class="font-bold text-gray-800">
+                        {{ auth()->user()->name }}
+                    </p>
+                    <p class="text-xs text-gray-500">
+                        {{ auth()->user()->email }}
+                    </p>
+                </div>
+
+                <!-- Profil Saya -->
+                <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">
+                <span>👤</span>
+                Profil Saya
                 </a>
+
+                <!-- Dashboard -->
+                <a href="{{ route('dashboard') }}"
+                   class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">
+                    <span>📋</span>
+                    Dashboard
+                </a>
+
+                <!-- Logout -->
+                <div class="border-t border-gray-100 mt-1 pt-1">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50">
+                            <span>🚪</span>
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
             </div>
+        </details>
+    @endauth
+
+</div>
+
 
             <div class="flex items-center gap-3">
                 <a href="{{ route('products.create') }}" class="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold shadow-sm transition">

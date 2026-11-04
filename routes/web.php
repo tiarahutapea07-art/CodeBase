@@ -9,6 +9,7 @@ use App\Http\Controllers\OutgoingGoodController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegotiationController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -171,5 +172,11 @@ Route::get('/products/{product}', [ProductController::class, 'show'])
 
     // 5. TAMBAHKAN INI: Penjual Terima / Tolak Tawaran
     Route::post('/offer/{messageId}/status', [ChatController::class, 'updateOfferStatus'])->name('offer.status');
+});
+
+//Profile
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profil', [ProfileController::class, 'index'])
+        ->name('profile.index');
 });
 

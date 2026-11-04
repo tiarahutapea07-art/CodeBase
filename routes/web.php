@@ -10,6 +10,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NegotiationController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\MyProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -87,9 +92,6 @@ Route::post('/keluar', [AuthController::class, 'logout'])
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    // Dashboard admin
-    Route::get('/dashboard', [ProductController::class, 'dashboard'])
-        ->name('dashboard');
 
     // CRUD produk
     Route::get('/products', [ProductController::class, 'index'])
@@ -116,9 +118,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // CRUD pengguna
     Route::resource('users', UserController::class);
 
-    // URL dashboard admin alternatif: /admin
-    Route::get('/admin', [ProductController::class, 'dashboard'])
-        ->name('admin.dashboard');
+
 });
 
 
@@ -174,9 +174,65 @@ Route::get('/products/{product}', [ProductController::class, 'show'])
     Route::post('/offer/{messageId}/status', [ChatController::class, 'updateOfferStatus'])->name('offer.status');
 });
 
-//Profile
+// PROFILE
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/profil', [ProfileController::class, 'index'])
         ->name('profile.index');
+
+    Route::put('/profil', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password.update');
+
 });
 
+// DASHBOARD BERDASARKAN JENIS AKUN
+Route::middleware(['auth'])->group(function () {
+
+    // Pengarah dashboard sesuai jenis akun
+    Route::get('/dashboard', function () {
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('user.dashboard');
+    })->name('dashboard');
+
+    // Dashboard Admin
+    Route::get('/admin/dashboard', [ProductController::class, 'dashboard'])
+    ->middleware('admin')
+    ->name('admin.dashboard');
+
+    // Dashboard Pengguna
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])
+        ->name('user.dashboard');
+
+});
+
+// FITUR FAVORIT
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorit', [FavoriteController::class, 'index'])
+        ->name('favorites.index');
+
+    Route::post('/favorit/{product}', [FavoriteController::class, 'toggle'])
+        ->name('favorites.toggle');
+});
+
+// BARANG SAYA - KHUSUS PENGGUNA
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/barang-saya', [MyProductController::class, 'index'])
+        ->name('my-products.index');
+
+    Route::get('/barang-saya/{id}/edit', [MyProductController::class, 'edit'])
+        ->name('my-products.edit');
+
+    Route::put('/barang-saya/{id}', [MyProductController::class, 'update'])
+        ->name('my-products.update');
+
+    Route::delete('/barang-saya/{id}', [MyProductController::class, 'destroy'])
+        ->name('my-products.destroy');
+
+});

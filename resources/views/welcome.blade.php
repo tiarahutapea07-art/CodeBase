@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>ReUseMarket - Thrift & Preloved Store</title>
 
@@ -115,59 +116,15 @@
         </a>
     @endguest
 
+    
     @auth
-        <!-- Jika sudah login: tampilkan foto profil berbentuk lingkaran -->
-        <details class="relative">
+        <a href="{{ route('dashboard') }}"
+        class="list-none cursor-pointer w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg flex items-center justify-center shadow-sm transition select-none"
+        title="Dashboard">
 
-            <summary
-                class="list-none cursor-pointer w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg flex items-center justify-center shadow-sm transition select-none"
-                title="Menu Profil">
+            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
 
-                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-
-            </summary>
-
-            <!-- Dropdown Profil -->
-            <div class="absolute right-0 top-12 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-[100]">
-
-                <!-- Informasi Pengguna -->
-                <div class="px-4 py-3 border-b border-gray-100">
-                    <p class="font-bold text-gray-800">
-                        {{ auth()->user()->name }}
-                    </p>
-                    <p class="text-xs text-gray-500">
-                        {{ auth()->user()->email }}
-                    </p>
-                </div>
-
-                <!-- Profil Saya -->
-                <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">
-                <span>👤</span>
-                Profil Saya
-                </a>
-
-                <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}"
-                   class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700">
-                    <span>📋</span>
-                    Dashboard
-                </a>
-
-                <!-- Logout -->
-                <div class="border-t border-gray-100 mt-1 pt-1">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50">
-                            <span>🚪</span>
-                            Logout
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-        </details>
+        </a>
     @endauth
 
 </div>
@@ -698,6 +655,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         </div>
 
+    @php
+        $favoriteProductIds = auth()->check()
+            ? auth()->user()->favorites()->pluck('product_id')->toArray()
+            : [];
+    @endphp
 
         <!-- Product Grid -->
        <div
@@ -750,18 +712,27 @@ document.addEventListener('DOMContentLoaded', function () {
                         @endif
 
                         <!-- Favorite -->
-                        <button
-                            class="absolute top-3 right-3
-                                   w-9 h-9
-                                   rounded-full
-                                   bg-white/80
-                                   backdrop-blur-sm
-                                   flex items-center justify-center
-                                   text-gray-600
-                                   hover:text-red-500 hover:bg-white
-                                   transition shadow-sm">
+                        @php
+                            $isFavorite = in_array($product->id, $favoriteProductIds ?? []);
+                        @endphp
 
-                            ♡
+                        <button
+                            type="button"
+                            class="favorite-button absolute top-3 right-3
+                                w-9 h-9 rounded-full bg-white/80
+                                backdrop-blur-sm flex items-center justify-center
+                                {{ $isFavorite ? 'text-red-500' : 'text-gray-600' }}
+                                hover:text-red-500 hover:bg-white
+                                transition shadow-sm"
+
+                            data-url="{{ auth()->check() ? route('favorites.toggle', $product->id) : '' }}"
+                            data-login="{{ route('login') }}"
+                            data-authenticated="{{ auth()->check() ? 'true' : 'false' }}"
+                            data-favorited="{{ $isFavorite ? 'true' : 'false' }}">
+
+                            <span class="favorite-icon text-2xl leading-none">
+                                {{ $isFavorite ? '♥' : '♡' }}
+                            </span>
 
                         </button>
 
@@ -1263,6 +1234,76 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 300);
             }
         }
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('.favorite-button').forEach(function (button) {
+
+            button.addEventListener('click', async function () {
+
+                // Jika belum login, arahkan ke halaman login
+                if (button.dataset.authenticated !== 'true') {
+                    window.location.href = button.dataset.login;
+                    return;
+                }
+
+                // Mencegah klik berulang ketika permintaan sedang diproses
+                if (button.disabled) return;
+
+                button.disabled = true;
+
+                const csrfToken = document.querySelector(
+                    'meta[name="csrf-token"]'
+                ).getAttribute('content');
+
+                try {
+                    const response = await fetch(button.dataset.url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Gagal memproses favorit.');
+                    }
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        const icon = button.querySelector('.favorite-icon');
+
+                        if (result.favorited) {
+                            // Produk berhasil ditambahkan
+                            icon.textContent = '♥';
+                            button.classList.remove('text-gray-600');
+                            button.classList.add('text-red-500');
+                            button.dataset.favorited = 'true';
+                        } else {
+                            // Produk berhasil dihapus
+                            icon.textContent = '♡';
+                            button.classList.remove('text-red-500');
+                            button.classList.add('text-gray-600');
+                            button.dataset.favorited = 'false';
+                        }
+                    }
+
+                } catch (error) {
+                    alert('Maaf, favorit gagal diproses. Silakan coba lagi.');
+                    console.error(error);
+
+                } finally {
+                    button.disabled = false;
+                }
+
+            });
+
+        });
+
+    });
     </script>
 
 </body>

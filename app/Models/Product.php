@@ -31,7 +31,12 @@ class Product extends Model
 }
 
 public function negotiations() { 
-    return $this->hasMany(Negotiation::class); }
+    return $this->hasMany(Negotiation::class); 
+}
 
-    
+public function favorites()
+{
+    return $this->hasMany(Favorite::class);
+}
+
 }

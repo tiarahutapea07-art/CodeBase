@@ -68,20 +68,29 @@ class ProductController extends Controller
             $validated['price'] = 0;
         }
 
-        // Upload gambar dari laptop
+        // Upload gambar
         if ($request->hasFile('image')) {
             $validated['image_url'] = $request->file('image')
                 ->store('products', 'public');
         }
 
-        // Menghapus field yang tidak ada di tabel products
+        // Menghapus field yang bukan kolom tabel products
         unset($validated['image'], $validated['type']);
 
-        // Menyimpan ID user
+        // Menghubungkan barang dengan pengguna yang sedang login
         $validated['user_id'] = auth()->id();
 
+        // Menyimpan barang ke database
         Product::create($validated);
 
+        // Pengguna biasa diarahkan ke Barang Saya
+        if (auth()->user()->role === 'user') {
+            return redirect()
+                ->route('my-products.index')
+                ->with('success', 'Barang berhasil ditambahkan!');
+        }
+
+        // Admin tetap diarahkan ke halaman data barang
         return redirect()
             ->route('products.index')
             ->with('success', 'Barang berhasil ditambahkan!');

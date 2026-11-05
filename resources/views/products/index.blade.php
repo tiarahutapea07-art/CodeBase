@@ -376,6 +376,12 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+        // Tutup modal jika klik area luar
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
 
         // MODAL KONFIRMASI HAPUS
         const deleteModal = document.getElementById('deleteModal');
@@ -400,7 +406,12 @@
             deleteModal.classList.remove('flex');
             selectedDeleteForm = null;
         }
-
+            // Tutup modal hapus jika klik area luar
+            deleteModal.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    closeDeleteModal();
+                }
+            });
         function confirmDelete() {
             if (selectedDeleteForm) {
                 selectedDeleteForm.submit();

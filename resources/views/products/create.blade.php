@@ -8,10 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body class="bg-slate-900/50 font-sans flex items-center justify-center min-h-screen p-4">
+<body onclick="window.location.href='{{ url('/products') }}'"
+    class="bg-slate-900/50 font-sans flex items-center justify-center min-h-screen p-4">
 
     <!-- Modal Box Utama -->
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+    <div onclick="event.stopPropagation()"
+        class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
 
         <!-- Header Modal -->
         <div class="bg-emerald-900 px-6 py-4 flex items-center justify-between text-white">

@@ -115,7 +115,9 @@
                                 @if($favorite->product->image_url)
 
                                     <img
-                                        src="{{ $favorite->product->image_url }}"
+                                        src="{{ str_starts_with($favorite->product->image_url ?? '', 'products/')
+                                        ? asset('storage/' . $favorite->product->image_url)
+                                        : asset($favorite->product->image_url) }}"
                                         alt="{{ $favorite->product->name }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
 

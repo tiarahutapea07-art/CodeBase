@@ -216,7 +216,9 @@
 
                             @if($product->image_url)
                                 <img
-                                    src="{{ asset('storage/' . $product->image_url) }}"
+                                    src="{{ str_starts_with($product->image_url ?? '', 'products/')
+                                    ? asset('storage/' . $product->image_url)
+                                    : asset($product->image_url) }}"
                                     alt="{{ $product->name }}"
                                     class="w-full h-44 object-cover"
                                 >

@@ -17,7 +17,7 @@ class ProductController extends Controller
         return view('welcome', compact('products'));
     }
 
-    // HALAMAN DASHBOARD (Ringkasan Saja)
+    // HALAMAN DASHBOARD
     public function dashboard()
     {
         $products = Product::with('user')->latest()->get();
@@ -31,7 +31,7 @@ class ProductController extends Controller
         ));
     }
 
-   // HALAMAN DATA BARANG (Kelola CRUD)
+    // HALAMAN DATA BARANG
     public function index(Request $request)
     {
         $query = Product::with('user')->latest();
@@ -43,8 +43,6 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
-
-        // Mengambil daftar kategori barang
         $categories = Category::orderBy('name')->get();
 
         return view('products.index', compact('products', 'categories'));
@@ -68,19 +66,24 @@ class ProductController extends Controller
             $validated['price'] = 0;
         }
 
-        // Upload gambar
+        // Simpan gambar langsung ke public/images
         if ($request->hasFile('image')) {
-            $validated['image_url'] = $request->file('image')
-                ->store('products', 'public');
+            $imageName = uniqid('product_') . '.' .
+                $request->file('image')->extension();
+
+            $request->file('image')->move(
+                public_path('images'),
+                $imageName
+            );
+
+            $validated['image_url'] = 'images/' . $imageName;
         }
 
-        // Menghapus field yang bukan kolom tabel products
+        // Hapus field yang bukan kolom tabel products
         unset($validated['image'], $validated['type']);
 
-        // Menghubungkan barang dengan pengguna yang sedang login
         $validated['user_id'] = auth()->id();
 
-        // Menyimpan barang ke database
         Product::create($validated);
 
         // Pengguna biasa diarahkan ke Barang Saya
@@ -90,12 +93,11 @@ class ProductController extends Controller
                 ->with('success', 'Barang berhasil ditambahkan!');
         }
 
-        // Admin tetap diarahkan ke halaman data barang
+        // Admin diarahkan ke halaman data barang
         return redirect()
             ->route('products.index')
             ->with('success', 'Barang berhasil ditambahkan!');
     }
-
 
     // EDIT DATA
     public function edit(Product $product)
@@ -124,17 +126,39 @@ class ProductController extends Controller
         // Jika user memilih gambar baru
         if ($request->hasFile('image')) {
 
-            // Hapus gambar lama jika tersimpan di folder products
-            if ($product->image_url && str_starts_with($product->image_url, 'products/')) {
+            // Hapus gambar lama hasil upload di public/images
+            if (
+                $product->image_url &&
+                str_starts_with($product->image_url, 'images/product_')
+            ) {
+                $oldImage = public_path($product->image_url);
+
+                if (file_exists($oldImage)) {
+                    unlink($oldImage);
+                }
+            }
+
+            // Hapus gambar lama dari penyimpanan versi sebelumnya
+            elseif (
+                $product->image_url &&
+                str_starts_with($product->image_url, 'products/')
+            ) {
                 Storage::disk('public')->delete($product->image_url);
             }
 
-            // Simpan gambar baru
-            $validated['image_url'] = $request->file('image')
-                ->store('products', 'public');
+            // Simpan gambar baru ke public/images
+            $imageName = uniqid('product_') . '.' .
+                $request->file('image')->extension();
+
+            $request->file('image')->move(
+                public_path('images'),
+                $imageName
+            );
+
+            $validated['image_url'] = 'images/' . $imageName;
         }
 
-        // Hapus type dan image karena bukan kolom tabel products
+        // Hapus field yang bukan kolom tabel products
         unset($validated['type'], $validated['image']);
 
         $product->update($validated);
@@ -143,11 +167,27 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Barang berhasil diperbarui!');
     }
+
     // HAPUS BARANG
     public function destroy(Product $product)
     {
-        // Hapus file gambar
-        if ($product->image_url) {
+        // Hapus gambar hasil upload di public/images
+        if (
+            $product->image_url &&
+            str_starts_with($product->image_url, 'images/product_')
+        ) {
+            $imagePath = public_path($product->image_url);
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // Hapus gambar lama dari penyimpanan versi sebelumnya
+        elseif (
+            $product->image_url &&
+            str_starts_with($product->image_url, 'products/')
+        ) {
             Storage::disk('public')->delete($product->image_url);
         }
 
@@ -158,23 +198,19 @@ class ProductController extends Controller
             ->with('success', 'Barang berhasil dihapus!');
     }
 
+    // DETAIL BARANG
     public function show($id)
     {
-        // Mengambil data produk berdasarkan ID
         $product = Product::findOrFail($id);
 
-        // Mengembalikan view detail barang dengan membawa data produk
         return view('products.show', compact('product'));
-
-        
     }
 
+    // FORM TAMBAH BARANG
     public function create()
     {
         $categories = Category::orderBy('name')->get();
 
         return view('products.create', compact('categories'));
     }
-
-    
 }

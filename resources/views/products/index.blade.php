@@ -126,8 +126,8 @@
 
                                     <form action="{{ route('products.destroy', $product->id) }}"
                                         method="POST"
-                                        class="inline"
-                                        onsubmit="return confirm('Apakah kamu yakin ingin menghapus barang ini?')">
+                                        class="inline delete-form"
+                                        data-name="{{ $product->name }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
@@ -249,6 +249,60 @@
             </form>
         </div>
     </div>
+
+    <!-- MODAL KONFIRMASI HAPUS -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-900/50 hidden items-center justify-center z-[60] p-4">
+
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
+
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-emerald-900 text-white">
+                <h3 class="font-bold text-lg">Konfirmasi Hapus</h3>
+                <button onclick="closeDeleteModal()" class="text-white/80 hover:text-white text-xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <div class="p-6 text-center">
+
+                <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-8 h-8 text-red-500"
+                        fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6 7h12m-10 0V5h8v2m-9 0 1 13h8l1-13M10 11v5m4-5v5"/>
+                    </svg>
+                </div>
+
+                <h4 class="text-lg font-bold text-gray-800 mb-2">
+                    Hapus Barang?
+                </h4>
+
+                <p class="text-sm text-gray-500">
+                    Apakah kamu yakin ingin menghapus barang
+                    <span id="deleteProductName" class="font-semibold text-gray-700"></span>?
+                </p>
+
+                <p class="text-xs text-gray-400 mt-2">
+                    Barang yang sudah dihapus tidak dapat dikembalikan.
+                </p>
+
+                <div class="flex gap-3 mt-6">
+
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition">
+                        Batal
+                    </button>
+
+                    <button type="button" onclick="confirmDelete()"
+                        class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl transition">
+                        Ya, Hapus
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script>
         const modal = document.getElementById('productModal');
@@ -321,6 +375,36 @@
         function closeModal() {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+        }
+
+        // MODAL KONFIRMASI HAPUS
+        const deleteModal = document.getElementById('deleteModal');
+        let selectedDeleteForm = null;
+
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                selectedDeleteForm = this;
+
+                document.getElementById('deleteProductName').innerText =
+                    this.dataset.name;
+
+                deleteModal.classList.remove('hidden');
+                deleteModal.classList.add('flex');
+            });
+        });
+
+        function closeDeleteModal() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+            selectedDeleteForm = null;
+        }
+
+        function confirmDelete() {
+            if (selectedDeleteForm) {
+                selectedDeleteForm.submit();
+            }
         }
     </script>
 </body>

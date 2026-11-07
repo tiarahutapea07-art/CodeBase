@@ -12,6 +12,7 @@ class Message extends Model
     protected $fillable = [
         'conversation_id',
         'sender_id',
+        'product_id',
         'body',
         'type',
         'offered_price',
@@ -26,5 +27,10 @@ class Message extends Model
     public function conversation()
     {
         return $this->belongsTo(Conversation::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

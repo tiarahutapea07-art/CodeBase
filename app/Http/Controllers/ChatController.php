@@ -9,100 +9,190 @@ use App\Models\Message;
 
 class ChatController extends Controller
 {
-    // Menampilkan daftar semua chat (Inbox)
+    // Menampilkan daftar chat pengguna
     public function index()
     {
         $userId = auth()->id();
-        $conversations = Conversation::with(['product', 'buyer', 'seller'])
-            ->where('buyer_id', $userId)
-            ->orWhere('seller_id', $userId)
-            ->latest()
-            ->get();
 
-        return view('chat.index', compact('conversations'));
+        $conversations = Conversation::with([
+            'product',
+            'buyer',
+            'seller',
+            'userOne',
+            'userTwo',
+            'messages'
+        ])
+        ->where('user_one_id', $userId)
+        ->orWhere('user_two_id', $userId)
+        ->latest()
+        ->get();
+
+        $selectedConversation = null;
+
+        return view('chat.index', compact(
+            'conversations',
+            'selectedConversation'
+        ));
     }
 
-    // 1. Logika saat tombol "Chat Penjual" diklik
+    // Membuka atau membuat ruang chat
     public function startConversation($productId)
     {
         $product = Product::findOrFail($productId);
-        $buyerId = auth()->id();
 
-        // Cek apakah pembeli dan penjual sudah punya ruang chat untuk produk ini
-        $conversation = Conversation::firstOrCreate([
+        $buyerId = auth()->id();
+        $sellerId = $product->user_id;
+
+        // Tidak boleh chat dengan akun sendiri
+        if ($buyerId == $sellerId) {
+            return back()->with('error', 'Tidak bisa menghubungi barang milik sendiri.');
+        }
+
+        // Urutkan ID agar pasangan selalu sama
+        $userOneId = min($buyerId, $sellerId);
+        $userTwoId = max($buyerId, $sellerId);
+
+        // Cari ruang chat berdasarkan pasangan pengguna
+        $conversation = Conversation::firstOrCreate(
+            [
+                'user_one_id' => $userOneId,
+                'user_two_id' => $userTwoId,
+            ],
+            [
+                'product_id' => $product->id,
+                'buyer_id' => $buyerId,
+                'seller_id' => $sellerId,
+            ]
+        );
+
+        // Perbarui konteks produk yang sedang dibicarakan
+        $conversation->update([
             'product_id' => $product->id,
-            'buyer_id'   => $buyerId,
-            'seller_id'  => $product->user_id, // Pastikan tabel produk punya kolom user_id pemilik barang
+            'buyer_id' => $buyerId,
+            'seller_id' => $sellerId,
         ]);
 
         return redirect()->route('chat.show', $conversation->id);
     }
 
-    // 2. Logika untuk menampilkan isi ruang chat
-    public function showChat($id)
+    // Memastikan pengguna merupakan anggota ruang chat
+    private function getUserConversation($id)
     {
-        $conversation = Conversation::with(['messages.sender', 'product', 'buyer', 'seller'])->findOrFail($id);
-        
-        // Pastikan yang akses adalah pembeli atau penjual yang bersangkutan
-        if (auth()->id() !== $conversation->buyer_id && auth()->id() !== $conversation->seller_id) {
-            abort(403, 'Unauthorized action.');
-        }
+        $userId = auth()->id();
 
-        return view('chat.show', compact('conversation'));
+        return Conversation::where('id', $id)
+            ->where(function ($query) use ($userId) {
+                $query->where('user_one_id', $userId)
+                      ->orWhere('user_two_id', $userId);
+            })
+            ->firstOrFail();
     }
 
-    // Mengirim pesan teks biasa di dalam chat
+    // Menampilkan isi ruang chat
+    public function showChat($id)
+    {
+        $userId = auth()->id();
+
+        $conversations = Conversation::with([
+            'product',
+            'buyer',
+            'seller',
+            'userOne',
+            'userTwo',
+            'messages.sender',
+            'messages.product'
+        ])
+        ->where('user_one_id', $userId)
+        ->orWhere('user_two_id', $userId)
+        ->latest()
+        ->get();
+
+        $selectedConversation = $conversations->firstWhere('id', $id);
+
+        if (!$selectedConversation) {
+            abort(404);
+        }
+
+        return view('chat.index', compact(
+            'conversations',
+            'selectedConversation'
+        ));
+    }
+
+    // Mengirim pesan teks
     public function sendMessage(Request $request, $id)
     {
+        $conversation = $this->getUserConversation($id);
+
         $request->validate([
             'body' => 'required|string|max:1000',
         ]);
 
         Message::create([
-            'conversation_id' => $id,
-            'sender_id'       => auth()->id(),
-            'body'            => $request->body,
-            'type'            => 'text',
-            'status'          => 'pending',
+            'conversation_id' => $conversation->id,
+            'sender_id' => auth()->id(),
+            'product_id' => $conversation->product_id,
+            'body' => $request->body,
+            'type' => 'text',
+            'status' => 'pending',
         ]);
 
         return back();
     }
 
-    // 3. Logika saat pengguna mengirimkan Ajukan Penawaran (Nego)
+    // Mengirim penawaran harga
     public function sendOffer(Request $request, $id)
     {
+        $conversation = $this->getUserConversation($id);
+
         $request->validate([
             'offered_price' => 'required|numeric|min:1000',
         ]);
 
         Message::create([
-            'conversation_id' => $id,
-            'sender_id'       => auth()->id(),
-            'body'            => 'Mengajukan penawaran harga sebesar Rp ' . number_format($request->offered_price, 0, ',', '.'),
-            'type'            => 'offer',
-            'offered_price'   => $request->offered_price,
-            'status'          => 'pending', // Status awal penawaran
+            'conversation_id' => $conversation->id,
+            'sender_id' => auth()->id(),
+            'product_id' => $conversation->product_id,
+            'body' => 'Mengajukan penawaran harga sebesar Rp ' .
+                number_format($request->offered_price, 0, ',', '.'),
+            'type' => 'offer',
+            'offered_price' => $request->offered_price,
+            'status' => 'pending',
         ]);
 
-        return back()->with('success', 'Tawaran harga berhasil dikirim ke penjual!');
+        return back()->with('success', 'Tawaran harga berhasil dikirim!');
     }
 
-    // 4. Logika Penjual Menerima atau Menolak Tawaran
+    // Menerima atau menolak penawaran
     public function updateOfferStatus(Request $request, $messageId)
     {
-        $message = Message::findOrFail($messageId);
-        
-        // Validasi status yang dikirim ('accepted' atau 'rejected')
         $request->validate([
             'status' => 'required|in:accepted,rejected',
         ]);
+
+        $userId = auth()->id();
+
+        $message = Message::where('type', 'offer')
+            ->where('status', 'pending')
+            ->whereHas('conversation', function ($query) use ($userId) {
+                $query->where('user_one_id', $userId)
+                      ->orWhere('user_two_id', $userId);
+            })
+            ->findOrFail($messageId);
+
+        // Pengirim penawaran tidak boleh menerima penawarannya sendiri
+        if ($message->sender_id == $userId) {
+            abort(403, 'Tidak dapat mengubah penawaran sendiri.');
+        }
 
         $message->update([
             'status' => $request->status,
         ]);
 
-        $statusText = $request->status === 'accepted' ? 'diterima' : 'ditolak';
-        return back()->with('success', 'Penawaran telah ' . $statusText);
+        $statusText = $request->status === 'accepted'
+            ? 'diterima'
+            : 'ditolak';
+
+        return back()->with('success', 'Penawaran telah ' . $statusText . '.');
     }
 }

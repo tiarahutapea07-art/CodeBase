@@ -95,39 +95,67 @@
                 @endguest
             </div>
 
+            <!-- FAVORIT DAN MESSAGE -->
+            @auth
+            <div class="flex items-center gap-4">
+                <!-- Ikon Favorit -->
+                <a href="{{ route('favorites.index') }}"
+                class="text-gray-700 hover:text-emerald-600 transition"
+                title="Favorit">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </a>
+
+                <!-- Ikon Message -->
+                <a href="{{ route('chat.index') }}"
+                class="text-gray-700 hover:text-emerald-600 transition"
+                title="Message">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 10h8M8 14h5m-9 6l2.5-3H18a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v14z"/>
+                    </svg>
+                </a>
+            </div>
+            @endauth
            
-<!-- MENU / FOTO PROFIL -->
-<div class="flex items-center">
+            <!-- MENU / FOTO PROFIL -->
+            <div class="flex items-center">
 
-    @guest
-        <!-- Jika belum login: tampilkan garis tiga -->
-        <a href="{{ route('dashboard') }}"
-           class="p-2 text-slate-700 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition"
-           title="Menu Dashboard">
+                @guest
+                    <!-- Jika belum login: tampilkan garis tiga -->
+                    <a href="{{ route('dashboard') }}"
+                    class="p-2 text-slate-700 hover:text-emerald-600 hover:bg-slate-100 rounded-xl transition"
+                    title="Menu Dashboard">
 
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 fill="none" viewBox="0 0 24 24"
-                 stroke-width="2" stroke="currentColor"
-                 class="w-6 h-6">
-                <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-            </svg>
-        </a>
-    @endguest
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor"
+                            class="w-6 h-6">
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                        </svg>
+                    </a>
+                @endguest
 
-    
-    @auth
-        <a href="{{ route('dashboard') }}"
-        class="list-none cursor-pointer w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg flex items-center justify-center shadow-sm transition select-none"
-        title="Dashboard">
+                
+                @auth
+                    <a href="{{ route('dashboard') }}"
+                    class="list-none cursor-pointer w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg flex items-center justify-center shadow-sm transition select-none"
+                    title="Dashboard">
 
-            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+                        {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
 
-        </a>
-    @endauth
+                    </a>
+                @endauth
 
-</div>
+            </div>
 
 
             <div class="flex items-center gap-3">

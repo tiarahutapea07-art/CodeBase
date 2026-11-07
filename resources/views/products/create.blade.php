@@ -13,7 +13,7 @@
 
     <!-- Modal Box Utama -->
     <div onclick="event.stopPropagation()"
-        class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+        `class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
 
         <!-- Header Modal -->
         <div class="bg-emerald-900 px-6 py-4 flex items-center justify-between text-white">

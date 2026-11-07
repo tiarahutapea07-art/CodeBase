@@ -14,6 +14,8 @@ class Conversation extends Model
         'product_id',
         'buyer_id',
         'seller_id',
+        'user_one_id',
+        'user_two_id',
     ];
 
     // Relasi opsional (biar rapi)
@@ -27,6 +29,16 @@ class Conversation extends Model
 
     public function seller() {
         return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function userOne()
+    {
+        return $this->belongsTo(User::class, 'user_one_id');
+    }
+
+    public function userTwo()
+    {
+        return $this->belongsTo(User::class, 'user_two_id');
     }
 
     public function messages() {

@@ -165,6 +165,47 @@
                 </div>
 
 
+                                <!-- Informasi Barang -->
+                @if($selectedConversation->product)
+                    <div class="px-4 py-3 border-b border-slate-200 bg-white">
+                        <div class="flex items-center gap-3">
+
+                            @if($selectedConversation->product->image_url)
+                                <img
+                                    src="{{ asset($selectedConversation->product->image_url) }}"
+                                    alt="Foto barang"
+                                    class="w-16 h-16 rounded-xl object-cover"
+                                >
+                            @else
+                                <div class="w-16 h-16 rounded-xl bg-slate-100
+                                    flex items-center justify-center text-slate-400 text-xs">
+                                    Tidak ada foto
+                                </div>
+                            @endif
+
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs text-slate-400">
+                                    Barang yang dibicarakan
+                                </p>
+
+                                <h3 class="font-bold text-sm text-slate-800 truncate">
+                                    {{ $selectedConversation->product->name }}
+                                </h3>
+
+                                <p class="text-sm font-semibold text-emerald-600">
+                                    @if($selectedConversation->product->price > 0)
+                                        Rp {{ number_format($selectedConversation->product->price, 0, ',', '.') }}
+                                    @else
+                                        Gratis
+                                    @endif
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                @endif
+                
+                
                 <!-- Isi Percakapan -->
                 <div class="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50">
 

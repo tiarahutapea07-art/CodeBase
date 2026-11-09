@@ -113,6 +113,12 @@ class ChatController extends Controller
             abort(404);
         }
 
+        // Tandai pesan dari pengguna lain sebagai sudah dibaca
+        Message::where('conversation_id', $selectedConversation->id)
+            ->where('sender_id', '!=', auth()->id())
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         return view('chat.index', compact(
             'conversations',
             'selectedConversation'

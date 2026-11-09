@@ -111,15 +111,34 @@
                 </a>
 
                 <!-- Ikon Message -->
+                @php
+                    $unreadCount = \App\Models\Message::whereNull('read_at')
+                        ->where('sender_id', '!=', auth()->id())
+                        ->whereHas('conversation', function ($query) {
+                            $query->where('user_one_id', auth()->id())
+                                ->orWhere('user_two_id', auth()->id());
+                        })
+                        ->count();
+                @endphp
+
                 <a href="{{ route('chat.index') }}"
-                class="text-gray-700 hover:text-emerald-600 transition"
+                class="relative text-gray-700 hover:text-emerald-600 transition"
                 title="Message">
+
                     <svg class="w-6 h-6" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             stroke-width="2"
                             d="M8 10h8M8 14h5m-9 6l2.5-3H18a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v14z"/>
                     </svg>
+
+                    @if($unreadCount > 0)
+                        <span class="absolute -top-2 -right-2 min-w-5 h-5 px-1
+                            bg-red-500 text-white text-[10px] font-bold rounded-full
+                            flex items-center justify-center">
+                            {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                        </span>
+                    @endif
                 </a>
             </div>
             @endauth

@@ -8,17 +8,56 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body onclick="window.location.href='{{ url('/products') }}'"
-    class="bg-slate-900/50 font-sans flex items-center justify-center min-h-screen p-4">
+<body class="bg-slate-50 font-sans min-h-screen">
+
+<!-- Header ReUseMarket -->
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-[1440px] mx-auto px-5 py-4">
+        <div class="flex items-center justify-between">
+
+            <!-- Logo -->
+            <a href="{{ route('home') }}"
+               class="text-2xl font-extrabold tracking-tight whitespace-nowrap">
+                <span class="text-emerald-600">Re</span><span class="text-gray-900">UseMarket</span>
+            </a>
+
+            <!-- Tombol Kembali -->
+            <a href="{{ route('home') }}"
+               class="flex items-center gap-2 px-4 py-2.5 rounded-xl
+                      border border-gray-300 text-gray-700
+                      hover:border-emerald-500 hover:text-emerald-600
+                      transition text-sm font-semibold">
+
+                <svg class="w-4 h-4" fill="none"
+                     stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 19l-7-7 7-7"/>
+                </svg>
+
+                Kembali ke Beranda
+            </a>
+
+        </div>
+    </div>
+</header>
+
+<!-- Area Form Tambah Barang -->
+<main class="flex items-center justify-center min-h-[calc(100vh-73px)] p-4">
+
 
     <!-- Modal Box Utama -->
     <div onclick="event.stopPropagation()"
-        `class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
+        class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
 
         <!-- Header Modal -->
         <div class="bg-emerald-900 px-6 py-4 flex items-center justify-between text-white">
             <h3 class="font-bold text-sm tracking-wide">Tambah Barang Baru</h3>
-            <a href="{{ url('/products') }}" class="text-emerald-200 hover:text-white text-lg font-bold">&times;</a>
+            <a href="{{ route('home') }}"
+   class="text-emerald-200 hover:text-white text-lg font-bold">
+    &times;
+</a>
         </div>
 
         <!-- Form Konten -->

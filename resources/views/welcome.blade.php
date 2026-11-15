@@ -70,18 +70,29 @@
     </svg>
 </button>
 
-            <!-- Pencarian -->
-            <div class="relative flex-1 min-w-[200px]">
-                <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="7" stroke-width="2"/>
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          stroke-width="2" d="m16 16 4 4"/>
-                </svg>
-                <input type="text" id="navbarSearch"
-                    placeholder="Cari barang preloved..."
-                    class="w-full border border-gray-300 rounded-xl pl-11 pr-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
-            </div>
+           
+<!-- Pencarian -->
+<form action="{{ route('home') }}" method="GET"
+      class="relative flex-1 min-w-[200px]">
+
+    <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" stroke-width="2"/>
+        <path stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2" d="m16 16 4 4"/>
+    </svg>
+
+    <input
+        type="text"
+        name="search"
+        id="navbarSearch"
+        value="{{ request('search') }}"
+        placeholder="Cari barang preloved..."
+        class="w-full border border-gray-300 rounded-xl pl-11 pr-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+    >
+
+</form>
+
 
             <!-- Login / Daftar -->
             <div class="whitespace-nowrap">

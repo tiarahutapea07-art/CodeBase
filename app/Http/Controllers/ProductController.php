@@ -10,12 +10,24 @@ use App\Models\Category;
 
 class ProductController extends Controller
 {
-    public function home()
-    {
-        $products = Product::latest()->get();
+   public function home(Request $request)
+{
+    $keyword = $request->input('search');
 
-        return view('welcome', compact('products'));
+    $query = Product::latest();
+
+    // Jika pengguna memasukkan kata kunci pencarian
+    if ($keyword) {
+        $query->where(function ($q) use ($keyword) {
+            $q->where('name', 'LIKE', "%{$keyword}%")
+              ->orWhere('description', 'LIKE', "%{$keyword}%");
+        });
     }
+
+    $products = $query->get();
+
+    return view('welcome', compact('products', 'keyword'));
+}
 
     // HALAMAN DASHBOARD
     public function dashboard()

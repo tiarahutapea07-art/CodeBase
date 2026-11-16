@@ -33,30 +33,157 @@
                 </button>
             </header>
             <!-- Filter Jenis Barang -->
-            <div class="mb-5 flex items-center gap-3">
-                <label for="filter" class="text-sm font-medium text-gray-700">
-                    Filter Barang:
+            
+<!-- FILTER DAN PENCARIAN BARANG -->
+<div class="mb-8 bg-white border border-emerald-100 rounded-2xl p-6 shadow-sm">
+
+    <div class="mb-5">
+        <h3 class="text-lg font-bold text-gray-800">
+            Filter dan Pencarian Barang
+        </h3>
+        <p class="text-sm text-gray-500 mt-1">
+            Temukan barang berdasarkan nama, kategori, jenis penawaran, dan kondisi barang.
+        </p>
+    </div>
+
+    <form action="{{ route('products.index') }}" method="GET">
+
+        <!-- PENCARIAN -->
+        <div class="mb-5">
+            <label class="block text-sm font-semibold text-gray-600 mb-2">
+                Pencarian Barang
+            </label>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Cari nama barang atau pemilik..."
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- KATEGORI -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">
+                    Kategori
                 </label>
 
-                <form action="{{ route('products.index') }}" method="GET">
-                    <select
-                        name="filter"
-                        id="filter"
-                        onchange="this.form.submit()"
-                        class="border border-emerald-200 rounded-xl px-4 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                        <option value="semua" {{ request('filter', 'semua') == 'semua' ? 'selected' : '' }}>
-                            Semua Barang
+                <select name="category"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+
+                    <option value="all">Semua Kategori</option>
+
+                    @foreach($categories as $category)
+                        <option value="{{ strtolower($category->name) }}"
+                            {{ request('category', 'all') == strtolower($category->name) ? 'selected' : '' }}>
+                            {{ $category->name }}
                         </option>
-                        <option value="jual" {{ request('filter') == 'jual' ? 'selected' : '' }}>
-                            Barang Dijual
-                        </option>
-                        <option value="donasi" {{ request('filter') == 'donasi' ? 'selected' : '' }}>
-                            Barang Donasi
-                        </option>
-                    </select>
-                </form>
+                    @endforeach
+
+                </select>
             </div>
+
+            <!-- JENIS PENAWARAN -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">
+                    Jenis Penawaran
+                </label>
+
+                <select name="filter"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+
+                    <option value="semua" {{ request('filter', 'semua') == 'semua' ? 'selected' : '' }}>
+                        Semua
+                    </option>
+
+                    <option value="jual" {{ request('filter') == 'jual' ? 'selected' : '' }}>
+                        Dijual
+                    </option>
+
+                    <option value="donasi" {{ request('filter') == 'donasi' ? 'selected' : '' }}>
+                        Donasi
+                    </option>
+                </select>
+            </div>
+
+            <!-- KONDISI -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">
+                    Kondisi Barang
+                </label>
+
+                <select name="condition"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+
+                    <option value="all">Semua Kondisi</option>
+                    <option value="Sangat Baik" {{ request('condition') == 'Sangat Baik' ? 'selected' : '' }}>
+                        Sangat Baik
+                    </option>
+                    <option value="Baik" {{ request('condition') == 'Baik' ? 'selected' : '' }}>
+                        Baik
+                    </option>
+                    <option value="Layak Pakai" {{ request('condition') == 'Layak Pakai' ? 'selected' : '' }}>
+                        Layak Pakai
+                    </option>
+                </select>
+            </div>
+
+            <!-- URUTKAN -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">
+                    Urutkan
+                </label>
+
+                <select name="sort"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+
+                    <option value="newest" {{ request('sort', 'newest') == 'newest' ? 'selected' : '' }}>
+                        Terbaru
+                    </option>
+
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                        Terlama
+                    </option>
+
+                    <option value="highest" {{ request('sort') == 'highest' ? 'selected' : '' }}>
+                        Harga Tertinggi
+                    </option>
+
+                    <option value="lowest" {{ request('sort') == 'lowest' ? 'selected' : '' }}>
+                        Harga Terendah
+                    </option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- TOMBOL FILTER -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mt-5 pt-4 border-t border-gray-100">
+
+            <p class="text-xs text-gray-400">
+                Filter dapat digunakan bersamaan.
+            </p>
+
+            <div class="flex gap-2">
+
+                <a href="{{ route('products.index') }}"
+                    class="px-4 py-2.5 border border-gray-300 text-gray-600 rounded-xl text-sm hover:bg-gray-50">
+                    ↻ Reset Filter
+                </a>
+
+                <button type="submit"
+                    class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold">
+                    Terapkan Filter
+                </button>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
 
             <!-- Tabel Data Barang -->
             <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
@@ -66,6 +193,7 @@
                             <th class="p-4">#</th>
                             <th class="p-4">Foto</th>
                             <th class="p-4">Nama Barang</th>
+                            <th class="p-4">Kategori</th>
                             <th class="p-4">Pemilik / User</th>
                             <th class="p-4">Kondisi</th>
                             <th class="p-4">Harga</th>
@@ -93,6 +221,11 @@
 
                                 <td class="p-4 font-semibold text-gray-800">
                                     {{ $product->name }}
+                                </td>
+
+                                <!-- KATEGORI BARANG -->
+                                <td class="p-4 text-gray-600">
+                                    {{ $product->category->name ?? '-' }}
                                 </td>
 
                                 <td class="p-4">

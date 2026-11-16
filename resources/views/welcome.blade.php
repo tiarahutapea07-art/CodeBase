@@ -522,14 +522,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         Jelajahi Barang <span>→</span>
                     </a>
 
-                    <a href="{{ route('login') }}"
-                       class="inline-flex items-center
-                              border border-emerald-600
-                              text-emerald-700 hover:bg-emerald-50
-                              font-bold px-6 py-3.5
-                              rounded-full transition">
-                        Mulai Jual
-                    </a>
 
                 </div>
             </div>

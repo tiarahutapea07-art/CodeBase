@@ -44,21 +44,69 @@ class ProductController extends Controller
     }
 
     // HALAMAN DATA BARANG
-    public function index(Request $request)
-    {
-        $query = Product::with('user')->latest();
+   
+public function index(Request $request)
+{
+    $query = Product::with(['user', 'category'])->latest();
 
-        if ($request->filter == 'jual') {
-            $query->where('price', '>', 0);
-        } elseif ($request->filter == 'donasi') {
-            $query->where('price', 0);
-        }
+    // PENCARIAN NAMA BARANG ATAU PEMILIK
+    if ($request->filled('search')) {
+        $keyword = $request->search;
 
-        $products = $query->get();
-        $categories = Category::orderBy('name')->get();
-
-        return view('products.index', compact('products', 'categories'));
+        $query->where(function ($q) use ($keyword) {
+            $q->where('name', 'LIKE', "%{$keyword}%")
+              ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                  $userQuery->where('name', 'LIKE', "%{$keyword}%");
+              });
+        });
     }
+
+    // FILTER KATEGORI
+    if ($request->filled('category') && $request->category !== 'all') {
+        $category = $request->category;
+
+        $query->whereHas('category', function ($q) use ($category) {
+            $q->whereRaw('LOWER(name) = ?', [strtolower($category)]);
+        });
+    }
+
+    // FILTER JENIS PENAWARAN
+    if ($request->filter === 'jual') {
+        $query->where('price', '>', 0);
+    } elseif ($request->filter === 'donasi') {
+        $query->where('price', 0);
+    }
+
+    // FILTER KONDISI
+    if ($request->filled('condition') && $request->condition !== 'all') {
+        $query->where('condition', $request->condition);
+    }
+
+    // PENGURUTAN
+    switch ($request->sort) {
+        case 'oldest':
+            $query->oldest();
+            break;
+
+        case 'highest':
+            $query->orderBy('price', 'desc');
+            break;
+
+        case 'lowest':
+            $query->orderBy('price', 'asc');
+            break;
+
+        default:
+            $query->latest();
+            break;
+    }
+
+    $products = $query->get();
+    $categories = Category::orderBy('name')->get();
+
+    return view('products.index', compact('products', 'categories'));
+}
+
 
     // TAMBAH BARANG
     public function store(Request $request)

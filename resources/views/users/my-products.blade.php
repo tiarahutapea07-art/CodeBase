@@ -138,7 +138,7 @@
 
                                 <form action="{{ route('my-products.destroy', $product->id) }}"
                                     method="POST"
-                                    onsubmit="return confirm('Apakah kamu yakin ingin menghapus barang ini?')">
+                                    class="delete-product-form">
 
                                     @csrf
                                     @method('DELETE')
@@ -186,6 +186,122 @@
     </main>
 
 </div>
+
+<!-- MODAL KONFIRMASI HAPUS -->
+<div id="deleteModal"
+     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-6 md:p-8 relative">
+
+        <!-- TOMBOL TUTUP -->
+        <button type="button"
+                id="closeDeleteModal"
+                class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 text-3xl">
+            &times;
+        </button>
+
+        <!-- IKON DAN JUDUL -->
+        <div class="flex items-center gap-4 mb-5">
+            <div class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-9 h-9 text-emerald-700"
+                     fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16"/>
+                </svg>
+            </div>
+
+            <h2 class="text-xl md:text-2xl font-bold text-emerald-800">
+                Konfirmasi Hapus Barang
+            </h2>
+        </div>
+
+        <!-- PESAN -->
+        <p class="text-gray-800 font-medium mb-4">
+            Apakah kamu yakin ingin menghapus barang ini?
+        </p>
+
+        <p class="text-sm text-gray-500 mb-7">
+            Barang yang dihapus tidak dapat dikembalikan.
+        </p>
+
+        <!-- TOMBOL -->
+        <div class="border-t border-gray-100 pt-5 flex justify-end gap-3">
+
+            <button type="button"
+                    id="cancelDelete"
+                    class="px-6 py-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold">
+                Batal
+            </button>
+
+            <button type="button"
+                    id="confirmDelete"
+                    class="px-6 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-semibold">
+                Ya, Hapus
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteModal = document.getElementById('deleteModal');
+    const closeDeleteModal = document.getElementById('closeDeleteModal');
+    const cancelDelete = document.getElementById('cancelDelete');
+    const confirmDelete = document.getElementById('confirmDelete');
+
+    let selectedDeleteForm = null;
+
+    // Membuka modal
+    document.querySelectorAll('.delete-product-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            selectedDeleteForm = this;
+
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Menutup modal
+    function hideDeleteModal() {
+        deleteModal.classList.add('hidden');
+        deleteModal.classList.remove('flex');
+
+        document.body.style.overflow = '';
+
+        selectedDeleteForm = null;
+    }
+
+    // Tombol Batal dan X
+    cancelDelete.addEventListener('click', hideDeleteModal);
+    closeDeleteModal.addEventListener('click', hideDeleteModal);
+
+    // Klik area luar modal
+    deleteModal.addEventListener('click', function(event) {
+        if (event.target === deleteModal) {
+            hideDeleteModal();
+        }
+    });
+
+    // Tombol Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+            hideDeleteModal();
+        }
+    });
+
+    // Konfirmasi hapus
+    confirmDelete.addEventListener('click', function() {
+        if (selectedDeleteForm) {
+            selectedDeleteForm.submit();
+        }
+    });
+</script>
 
 </body>
 </html>

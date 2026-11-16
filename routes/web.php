@@ -212,9 +212,16 @@ Route::middleware(['auth'])->group(function () {
 
 // FITUR FAVORIT
 Route::middleware(['auth'])->group(function () {
+
+    // Favorit dari Dashboard
     Route::get('/favorit', [FavoriteController::class, 'index'])
         ->name('favorites.index');
 
+    // Favorit dari Navbar
+    Route::get('/favorit-navbar', [FavoriteController::class, 'navbar'])
+        ->name('favorites.navbar');
+
+    // Tambah dan hapus favorit
     Route::post('/favorit/{product}', [FavoriteController::class, 'toggle'])
         ->name('favorites.toggle');
 });

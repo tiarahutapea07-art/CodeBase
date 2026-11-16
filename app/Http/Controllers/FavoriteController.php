@@ -20,6 +20,18 @@ class FavoriteController extends Controller
         return view('favorites.index', compact('favorites'));
     }
 
+    // Menampilkan halaman favorit dari navbar
+    public function navbar()
+    {
+        $favorites = Auth::user()
+            ->favorites()
+            ->with('product')
+            ->latest()
+            ->get();
+
+        return view('favorites.navbar', compact('favorites'));
+    }
+
     // Menambah atau menghapus favorit tanpa refresh
     public function toggle(Request $request, Product $product)
     {

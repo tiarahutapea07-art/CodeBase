@@ -33,65 +33,65 @@
 <!-- ================= NAVBAR REUSEMARKET ================= -->
 <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
     <div class="max-w-[1440px] mx-auto px-5 py-4">
-        <div class="flex flex-wrap lg:flex-nowrap items-center gap-4">
+       <div class="flex flex-nowrap items-center gap-1 sm:gap-2 w-full min-w-0">
 
             <!-- Logo -->
             <a href="{{ route('home') }}"
-               class="text-2xl font-extrabold tracking-tight whitespace-nowrap">
+               class="text-sm sm:text-lg lg:text-2xl font-extrabold tracking-tight whitespace-nowrap shrink-0"
                 <span class="text-emerald-600">Re</span><span class="text-gray-900">UseMarket</span>
             </a>
 
             <!-- Pilih Lokasi -->
             
-<button type="button" id="openLocation"
-    class="flex items-center justify-between gap-2 border border-gray-300 rounded-xl px-3 py-3 min-w-[170px] hover:border-emerald-500 transition">
+            <button type="button" id="openLocation"
+                class="flex items-center justify-center gap-1 sm:gap-2 border border-gray-300 rounded-xl px-1.5 sm:px-2 lg:px-3 py-2 sm:py-3 min-w-0 shrink-0 hover:border-emerald-500 transition"
 
-    <span class="flex items-center gap-2 min-w-0">
-        <svg class="w-5 h-5 text-emerald-600 shrink-0"
-             fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/>
-            <circle cx="12" cy="9" r="2.5"/>
-        </svg>
+                <span class="flex items-center gap-2 min-w-0">
+                    <svg class="w-5 h-5 text-emerald-600 shrink-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/>
+                        <circle cx="12" cy="9" r="2.5"/>
+                    </svg>
 
-        <span id="selectedLocation"
-              class="text-sm text-gray-700 truncate">
-            Pilih lokasi
-        </span>
-    </span>
+                    <span id="selectedLocation"
+                        class="hidden sm:inline">
+                        Pilih lokasi
+                    </span>
+                </span>
 
-    <svg class="w-4 h-4 text-gray-500 shrink-0"
-         fill="none" stroke="currentColor" viewBox="0 0 24 24"
-         aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2"
-              d="m6 9 6 6 6-6"/>
-    </svg>
-</button>
+                <svg class="w-4 h-4 text-gray-500 shrink-0"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m6 9 6 6 6-6"/>
+                </svg>
+            </button>
 
-           
-<!-- Pencarian -->
-<form action="{{ route('home') }}" method="GET"
-      class="relative flex-1 min-w-[200px]">
+                    
+            <!-- Pencarian -->
+            <form action="{{ route('home') }}" method="GET"
+                class="relative flex-1 min-w-0">
 
-    <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7" stroke-width="2"/>
-        <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2" d="m16 16 4 4"/>
-    </svg>
+                <svg class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" d="m16 16 4 4"/>
+                </svg>
 
-    <input
-        type="text"
-        name="search"
-        id="navbarSearch"
-        value="{{ request('search') }}"
-        placeholder="Cari barang preloved..."
-        class="w-full border border-gray-300 rounded-xl pl-11 pr-4 py-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-    >
+                <input
+                    type="text"
+                    name="search"
+                    id="navbarSearch"
+                    value="{{ request('search') }}"
+                    placeholder="Cari barang preloved..."
+                    class="w-full min-w-0 border border-gray-300 rounded-xl pl-11 pr-4 py-3 text-sm text-gray-900 placeholder-gray-400 bg-white outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                >
 
-</form>
+            </form>
 
 
             <!-- Login / Daftar -->
@@ -203,8 +203,8 @@
 
     <!-- Popup Peta -->
     <div id="locationPanel"
-         class="hidden absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl">
-        <div class="max-w-5xl mx-auto p-5">
+         class="hidden fixed inset-0 w-full h-[100dvh] bg-white z-[1000] overflow-y-auto overscroll-contain">
+        <div class="w-full min-h-full p-4 md:p-8 flex flex-col">
 
             <div class="flex justify-between items-center gap-3 mb-4">
                 <div>
@@ -335,7 +335,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Tampilan awal di Palembang; pengguna bebas memilih lokasi lain.
-        map = L.map(mapElement).setView([-2.9761, 104.7754], 12);
+        map = L.map(mapElement, {
+            scrollWheelZoom: false
+        }).setView([-2.9761, 104.7754], 12);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',

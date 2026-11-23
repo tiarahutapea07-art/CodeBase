@@ -78,8 +78,10 @@
     </div>
 
     <!-- Modal Pengguna -->
-    <div id="userModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
+    <div id="userModal"
+    class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4"
+     onclick="if (event.target === this) closeModal('userModal')">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
             
             <!-- Header Hijau Emerald -->
             <div class="bg-emerald-900 px-6 py-4 flex items-center justify-between text-white">

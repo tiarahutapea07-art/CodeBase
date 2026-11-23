@@ -9,30 +9,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-emerald-50/30 font-sans">
+<body class="bg-emerald-50/30 font-sans text-gray-800">
 
-    <main class="w-full max-w-7xl mx-auto p-5 md:p-8">
+    <main class="max-w-7xl mx-auto px-6 pt-0 pb-8">
 
         
-    {{-- HEADER --}}
-    <div class="mb-8">
+   
+    <!-- HEADER NAVBAR -->
+        <div class="bg-white border-b border-emerald-100 -mx-6 px-6 py-5 mb-8">
+            <div class="flex items-center justify-between max-w-7xl mx-auto">
+                <a href="{{ route('home') }}"
+                class="text-2xl font-bold text-emerald-800 tracking-tight">
+                    ReUseMarket
+                </a>
 
-        {{-- NAVBAR KECIL --}}
-        <div class="flex items-center justify-between border-b border-emerald-100 pb-5 mb-8">
-            <a href="{{ route('home') }}"
-            class="text-2xl font-bold text-emerald-800 tracking-tight">
-                ReUseMarket
-            </a>
-
-            <a href="{{ route('home') }}"
-            class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 hover:text-emerald-600 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                Kembali ke Beranda
-            </a>
+                <a href="{{ route('home') }}"
+                class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-800 hover:text-emerald-600 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Kembali ke Beranda
+                </a>
+            </div>
         </div>
 
         {{-- JUDUL HALAMAN --}}
@@ -153,11 +153,12 @@
                                 </a>
 
                                 <button type="button"
-                                        onclick="hapusFavorit(this)"
-                                        data-url="{{ route('favorites.toggle', $favorite->product->id) }}"
-                                        class="w-full border border-red-200 text-red-500 hover:bg-red-50 rounded-lg py-2.5 text-sm font-semibold transition mt-2">
-                                    ♥ Hapus Favorit
-                                </button>
+                                onclick="bukaModalHapus(this)"
+                                data-url="{{ route('favorites.toggle', $favorite->product->id) }}"
+                                data-name="{{ $favorite->product->name }}"
+                                class="w-full border border-red-200 text-red-500 hover:bg-red-50 rounded-lg py-2.5 text-sm font-semibold transition mt-2">
+                            ♥ Hapus Favorit
+                        </button>
 
                             </div>
                         </div>
@@ -176,46 +177,129 @@
 
     </main>
 
+        </main>
+
+    <!-- MODAL KONFIRMASI HAPUS FAVORIT -->
+    <div id="modalHapus"
+         class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4"
+         onclick="tutupModalHapus()">
+
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6"
+             onclick="event.stopPropagation()">
+
+            <div class="text-center">
+
+                <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                    ♥
+                </div>
+
+                <h2 class="text-xl font-bold text-gray-800">
+                    Hapus Barang Favorit?
+                </h2>
+
+                <p class="text-sm text-gray-500 mt-2">
+                    Apakah kamu yakin ingin menghapus
+                    <span id="namaProdukHapus" class="font-bold text-gray-700"></span>
+                    dari daftar favorit?
+                </p>
+
+                <div class="flex gap-3 mt-6">
+
+                    <button type="button"
+                            onclick="tutupModalHapus()"
+                            class="flex-1 py-3 rounded-xl border border-gray-300 text-gray-600 font-semibold hover:bg-gray-50">
+                        Batal
+                    </button>
+
+                    <button type="button"
+                            id="btnKonfirmasiHapus"
+                            onclick="konfirmasiHapus()"
+                            class="flex-1 py-3 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600">
+                        Ya, Hapus
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script>
-        async function hapusFavorit(button) {
-            if (!confirm('Yakin ingin menghapus barang ini dari favorit?')) return;
+    let tombolFavoritAktif = null;
 
-            button.disabled = true;
-            button.textContent = 'Menghapus...';
+    // Membuka modal
+    function bukaModalHapus(button) {
+        tombolFavoritAktif = button;
 
-            try {
-                const response = await fetch(button.dataset.url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                });
+        document.getElementById('namaProdukHapus').textContent =
+            button.dataset.name;
 
-                if (!response.ok) throw new Error();
+        const modal = document.getElementById('modalHapus');
 
-                const result = await response.json();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
-                if (result.success && result.favorited === false) {
-                    const card = button.closest('.group');
-                    const grid = card.parentElement;
-                    card.remove();
+    // Menutup modal
+    function tutupModalHapus() {
+        const modal = document.getElementById('modalHapus');
 
-                    if (grid.children.length === 0) {
-                        location.reload();
-                    }
-                } else {
-                    throw new Error();
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        tombolFavoritAktif = null;
+    }
+
+    // Menghapus favorit setelah dikonfirmasi
+    async function konfirmasiHapus() {
+        if (!tombolFavoritAktif) return;
+
+        const button = tombolFavoritAktif;
+        const tombolKonfirmasi = document.getElementById('btnKonfirmasiHapus');
+
+        tombolKonfirmasi.disabled = true;
+        tombolKonfirmasi.textContent = 'Menghapus...';
+
+        try {
+            const response = await fetch(button.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!response.ok) throw new Error();
+
+            const result = await response.json();
+
+            if (result.success && result.favorited === false) {
+
+                const card = button.closest('.group');
+                const grid = card.parentElement;
+
+                card.remove();
+
+                tutupModalHapus();
+
+                // Jika sudah tidak ada barang favorit
+                if (grid.children.length === 0) {
+                    location.reload();
                 }
 
-            } catch (error) {
-                alert('Gagal menghapus favorit. Silakan coba lagi.');
-                button.disabled = false;
-                button.textContent = '♥ Hapus Favorit';
+            } else {
+                throw new Error();
             }
+
+        } catch (error) {
+            alert('Gagal menghapus favorit. Silakan coba lagi.');
         }
-    </script>
+
+        tombolKonfirmasi.disabled = false;
+        tombolKonfirmasi.textContent = 'Ya, Hapus';
+    }
+</script>
 
 </body>
 </html>

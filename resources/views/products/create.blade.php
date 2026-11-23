@@ -44,20 +44,28 @@
 </header>
 
 <!-- Area Form Tambah Barang -->
-<main class="flex items-center justify-center min-h-[calc(100vh-73px)] p-4">
-
-
+<main
+    data-url-kembali="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('home') }}"
+    ondblclick="tutupFormTambahBarang(this)"
+    class="flex items-center justify-center min-h-[calc(100vh-73px)] p-4">
     <!-- Modal Box Utama -->
-    <div onclick="event.stopPropagation()"
+     <div
+        onclick="event.stopPropagation()"
+        ondblclick="event.stopPropagation()"
         class="bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200">
 
         <!-- Header Modal -->
         <div class="bg-emerald-900 px-6 py-4 flex items-center justify-between text-white">
-            <h3 class="font-bold text-sm tracking-wide">Tambah Barang Baru</h3>
-            <a href="{{ route('home') }}"
-   class="text-emerald-200 hover:text-white text-lg font-bold">
-    &times;
-</a>
+            <h3 class="font-bold text-sm tracking-wide">
+                Tambah Barang Baru
+            </h3>
+
+            <a href="{{ auth()->user()->role === 'admin'
+                ? route('admin.dashboard')
+                : route('home') }}"
+                class="text-emerald-200 hover:text-white text-lg font-bold">
+                &times;
+            </a>
         </div>
 
         <!-- Form Konten -->
@@ -222,8 +230,9 @@
 
                 <!-- Tombol Aksi -->
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                    <a href="{{ url('/products') }}"
-                       class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+                   <a href="{{ auth()->user()->role === 'admin'
+                        ? route('admin.dashboard')
+                        : route('home') }}">
                         Batal
                     </a>
 
@@ -239,6 +248,13 @@
 
     <!-- Pengaturan Form -->
     <script>
+        function tutupFormTambahBarang(area) {
+            const urlKembali = area.getAttribute('data-url-kembali');
+
+            if (urlKembali) {
+                window.location.href = urlKembali;
+            }
+        }
         function aturForm() {
         const pilihan = document.querySelector('input[name="type"]:checked');
         const jenis = pilihan ? pilihan.value : '';

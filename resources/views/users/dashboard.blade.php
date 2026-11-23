@@ -21,10 +21,13 @@
         <!-- HEADER -->
         <header class="flex justify-between items-center mb-8 gap-5">
 
+           <!-- KOLOM PENCARIAN -->
             <div class="flex-1">
                 <input
                     type="text"
+                    id="searchBarang"
                     placeholder="Cari barang..."
+                    autocomplete="off"
                     class="w-full bg-white border border-gray-200 rounded-full px-5 py-3 outline-none focus:ring-2 focus:ring-emerald-400"
                 >
             </div>
@@ -199,74 +202,98 @@
                     Barang Terbaru
                 </h3>
 
-                <a href="#barang-saya"
-                   class="text-emerald-600 text-sm font-semibold hover:underline">
-                    Barang Saya →
-                </a>
+                
 
             </div>
 
             @if(isset($products) && $products->count() > 0)
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 p-5">
-
+              <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 p-5">
                     @foreach($products->take(6) as $product)
 
-                        <div class="border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition">
-
-                            @if($product->image_url)
-                                <img
-                                    src="{{ str_starts_with($product->image_url ?? '', 'products/')
-                                    ? asset('storage/' . $product->image_url)
-                                    : asset($product->image_url) }}"
-                                    alt="{{ $product->name }}"
-                                    class="w-full h-44 object-cover"
-                                >
-                            @else
-                                <div class="w-full h-44 bg-emerald-50 flex items-center justify-center text-emerald-600">
-                                    Tidak ada gambar
-                                </div>
-                            @endif
-
-                            <div class="p-4">
-
-                                <h4 class="font-bold text-gray-800 mb-2">
-                                    {{ $product->name }}
-                                </h4>
-
-                                <p class="text-sm text-gray-500 mb-2">
-                                    Kondisi: {{ $product->condition }}
-                                </p>
-
-                                <p class="font-semibold text-emerald-700">
-                                    @if($product->price == 0)
-                                        Donasi
-                                    @else
-                                        Rp{{ number_format($product->price, 0, ',', '.') }}
-                                    @endif
-                                </p>
-
+                        <div 
+                        class="product-card border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition"
+                        data-search="{{ strtolower($product->name . ' ' . ($product->description ?? '')) }}"
+                        >
+                         @if($product->image_url)
+                         <img
+                            src="{{ str_starts_with($product->image_url ?? '', 'products/')
+                            ? asset('storage/' . $product->image_url)
+                            : asset($product->image_url) }}"
+                            alt="{{ $product->name }}"
+                            class="w-full h-44 object-cover"
+                        >
+                         @else
+                            <div class="w-full h-44 bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            Tidak ada gambar
                             </div>
-
+                        @endif
+                        
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800 mb-2">
+                                {{ $product->name }}
+                            </h4>
+                            
+                            <p class="text-sm text-gray-500 mb-2">
+                                Kondisi: {{ $product->condition }}
+                            </p>
+                            
+                            <p class="font-semibold text-emerald-700">
+                                @if($product->price == 0)
+                                    Donasi
+                                @else
+                                    Rp{{ number_format($product->price, 0, ',', '.') }}
+                                @endif
+                            </p>
                         </div>
-
+                    </div>
                     @endforeach
-
                 </div>
 
-            @else
+                <!-- Tambahkan bagian ini -->
+                <div id="noSearchResult" class="hidden p-8 text-center text-gray-400">
+                    Barang tidak ditemukan.
+                </div>
 
+
+                @else
                 <div class="p-8 text-center text-gray-400">
                     Kamu belum menambahkan barang.
                 </div>
+                @endif
+            </div>
+        </main>
+    </div>
 
-            @endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchBarang');
+        const productCards = document.querySelectorAll('.product-card');
+        const noResult = document.getElementById('noSearchResult');
 
-        </div>
+        if (!searchInput) return;
 
-    </main>
+        searchInput.addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            let jumlahDitemukan = 0;
 
-</div>
+            productCards.forEach(function (card) {
+                const namaBarang = card.dataset.search || '';
+
+                if (namaBarang.includes(keyword)) {
+                    card.classList.remove('hidden');
+                    jumlahDitemukan++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            if (noResult) {
+                noResult.classList.toggle('hidden', jumlahDitemukan > 0);
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

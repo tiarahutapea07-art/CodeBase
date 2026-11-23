@@ -108,7 +108,7 @@
 
             <!-- FAVORIT DAN MESSAGE -->
             @auth
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
                 <!-- Ikon Favorit -->
                 <a href="{{ route('favorites.navbar') }}"
                 class="text-gray-700 hover:text-emerald-600 transition"

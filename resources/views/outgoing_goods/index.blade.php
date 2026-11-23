@@ -71,7 +71,9 @@
     </div>
 
     <!-- Modal Barang Keluar -->
-    <div id="outgoingModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+<div id="outgoingModal"
+     class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4"
+     onclick="if (event.target === this) closeModal('outgoingModal')">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
             
             <!-- Header Hijau Emerald -->

@@ -207,9 +207,11 @@
 
 <!-- MODAL KONFIRMASI HAPUS FAVORIT -->
 <div id="modalFavorit"
+     onclick="tutupModalFavorit()"
      class="fixed inset-0 z-50 hidden items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
 
-    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-7 text-center">
+    <div onclick="event.stopPropagation()"
+     class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-7 text-center">
 
         <!-- IKON -->
         <div class="w-20 h-20 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-5">
